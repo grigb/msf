@@ -92,6 +92,6 @@ export const navigation: NavSection[] = [
 export const footerLinks: NavItem[] = [
   { label: 'Metaverse Standards Forum', href: 'https://metaverse-standards.org' },
   { label: 'Appendices', href: '/appendices/' },
-  { label: 'Methodology', href: '/appendices/methodology/' },
-  { label: 'Sources', href: '/appendices/sources/' },
+  { label: 'Methodology', href: '/appendices/#appendix-c-methodology-notes' },
+  { label: 'Sources', href: '/appendices/#appendix-b-research-sources' },
 ];
