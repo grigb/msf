@@ -55,12 +55,13 @@ function rewriteUrl(value, prefix, attr) {
   let normalized = pathname.replace(/^\/+/, '');
   if (!normalized) {
     if (attr !== 'href') return value;
-    normalized = 'index.html';
+    normalized = '';
   } else if (attr === 'href') {
     if (pathname.endsWith('/')) {
-      normalized = `${normalized}index.html`;
+      // Keep directory URLs in output to avoid `/index.html` links.
+      normalized = normalized;
     } else if (!hasFileExtension(normalized)) {
-      normalized = `${normalized}/index.html`;
+      normalized = `${normalized}/`;
     }
   }
 
