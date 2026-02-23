@@ -26,7 +26,7 @@ export default defineConfig({
   },
 
   // GitHub Pages deployment at /msf/aim/reports/ai-generative-virtual-environments/
-  site: 'https://grigbilham.com',
+  site: 'https://grigb.github.io',
   base: '/msf/aim/reports/ai-generative-virtual-environments',
 
   // Ensure trailing slashes for directory-based routing
