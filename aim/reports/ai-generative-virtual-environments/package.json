@@ -5,7 +5,7 @@
   "description": "MSF AI-Generated Virtual Environments - Interactive Reference Site (Offline-capable)",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && SITE_BASE=/msf/aim/reports/ai-generative-virtual-environments node scripts/fix-paths.cjs",
     "build:offline": "astro build && node scripts/fix-paths.cjs",
     "preview": "astro preview"
   },

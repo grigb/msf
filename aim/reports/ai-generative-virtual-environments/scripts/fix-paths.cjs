@@ -1,51 +1,81 @@
 #!/usr/bin/env node
 /**
- * Post-build script to fix paths for offline/file:// access
- * Converts absolute paths to relative paths in all HTML files
+ * Post-build script to normalize site-internal URLs.
+ * Converts absolute root URLs to relative URLs so navigation works from:
+ * - GitHub Pages subpaths
+ * - file:// offline viewing
  */
 
 const fs = require('fs');
 const path = require('path');
 
 const distDir = path.join(__dirname, '..', 'dist');
+const rawSiteBase = process.env.SITE_BASE || '';
+const siteBase = rawSiteBase ? `/${rawSiteBase.replace(/^\/+|\/+$/g, '')}` : '';
 
 function getRelativePrefix(htmlPath) {
-  // Calculate how many levels deep this file is from dist root
+  // Calculate how many levels deep this file is from dist root.
   const relativePath = path.relative(distDir, path.dirname(htmlPath));
   if (!relativePath) return './';
   const depth = relativePath.split(path.sep).length;
   return '../'.repeat(depth);
 }
 
+function hasFileExtension(value) {
+  return path.posix.extname(value) !== '';
+}
+
+function stripSiteBase(url) {
+  if (!siteBase) return url;
+  if (url === siteBase || url === `${siteBase}/`) return '/';
+  if (url.startsWith(`${siteBase}/`)) {
+    return url.slice(siteBase.length) || '/';
+  }
+  return url;
+}
+
+function rewriteUrl(value, prefix, attr) {
+  if (
+    value.startsWith('http://') ||
+    value.startsWith('https://') ||
+    value.startsWith('//') ||
+    value.startsWith('mailto:') ||
+    value.startsWith('tel:') ||
+    value.startsWith('#')
+  ) {
+    return value;
+  }
+
+  let url = stripSiteBase(value);
+  if (!url.startsWith('/')) return url;
+
+  const [pathWithQuery, hash = ''] = url.split('#');
+  const [pathname, query = ''] = pathWithQuery.split('?');
+
+  let normalized = pathname.replace(/^\/+/, '');
+  if (!normalized) {
+    if (attr !== 'href') return value;
+    normalized = 'index.html';
+  } else if (attr === 'href') {
+    if (pathname.endsWith('/')) {
+      normalized = `${normalized}index.html`;
+    } else if (!hasFileExtension(normalized)) {
+      normalized = `${normalized}/index.html`;
+    }
+  }
+
+  const querySuffix = query ? `?${query}` : '';
+  const hashSuffix = hash ? `#${hash}` : '';
+  return `${prefix}${normalized}${querySuffix}${hashSuffix}`;
+}
+
 function fixPaths(filePath) {
   let content = fs.readFileSync(filePath, 'utf8');
   const prefix = getRelativePrefix(filePath);
 
-  // Fix asset paths: /./assets/ or /assets/ -> ./assets/ or ../assets/
-  content = content.replace(/href="\/\.?\/assets\//g, `href="${prefix}assets/`);
-  content = content.replace(/src="\/\.?\/assets\//g, `src="${prefix}assets/`);
-
-  // Fix navigation links: href="/" -> href="./index.html" or href="../index.html"
-  content = content.replace(/href="\/"/g, `href="${prefix}index.html"`);
-
-  // Fix section links: href="/scope/" -> href="./scope/" or href="../scope/"
-  content = content.replace(/href="\/([a-z-]+)\/"/g, `href="${prefix}$1/index.html"`);
-
-  // Fix implementation links: href="/implementations/xyz/" -> relative path
-  content = content.replace(/href="\/implementations\/([a-z0-9-]+)\/"/g, `href="${prefix}implementations/$1/index.html"`);
-
-  // Fix pagefind path
-  content = content.replace(/href="\.\/pagefind\//g, `href="${prefix}pagefind/`);
-
-  // Fix any remaining absolute paths starting with /
-  content = content.replace(/href="\/([^"]+)"/g, (match, p1) => {
-    if (p1.startsWith('http') || p1.startsWith('#')) return match;
-    return `href="${prefix}${p1}"`;
-  });
-
-  content = content.replace(/src="\/([^"]+)"/g, (match, p1) => {
-    if (p1.startsWith('http')) return match;
-    return `src="${prefix}${p1}"`;
+  content = content.replace(/\b(href|src)="([^"]+)"/g, (_, attr, value) => {
+    const rewritten = rewriteUrl(value, prefix, attr);
+    return `${attr}="${rewritten}"`;
   });
 
   fs.writeFileSync(filePath, content);
@@ -65,6 +95,6 @@ function walkDir(dir) {
   }
 }
 
-console.log('Fixing paths for offline access...');
+console.log(`Fixing paths for static hosting${siteBase ? ` (site base: ${siteBase})` : ''}...`);
 walkDir(distDir);
 console.log('Done!');
