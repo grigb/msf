@@ -1,0 +1,137 @@
+---
+/**
+ * ActionItem.astro
+ * Component for displaying recommended actions with priority and timeline
+ * Used in the recommendations section of the report
+ */
+
+interface Props {
+  priority: number;
+  effort: 'LOW' | 'MEDIUM' | 'HIGH';
+  timeline: string;
+}
+
+const { priority, effort, timeline } = Astro.props;
+
+// Priority colors
+const priorityColors: Record<number, { bg: string; text: string; label: string }> = {
+  1: { bg: 'var(--color-error-light)', text: 'var(--color-error)', label: 'Critical' },
+  2: { bg: 'var(--color-warning-light)', text: 'var(--color-warning)', label: 'High' },
+  3: { bg: 'var(--color-info-light)', text: 'var(--color-info)', label: 'Medium' },
+  4: { bg: 'var(--color-success-light)', text: 'var(--color-success)', label: 'Low' },
+};
+
+const priorityConfig = priorityColors[priority] || priorityColors[4];
+
+// Effort colors
+const effortColors: Record<string, string> = {
+  LOW: 'var(--color-success)',
+  MEDIUM: 'var(--color-warning)',
+  HIGH: 'var(--color-error)',
+};
+---
+
+<div class="action-item" style={`--priority-bg: ${priorityConfig.bg}; --priority-color: ${priorityConfig.text};`}>
+  <div class="action-item__header">
+    <span class="action-item__priority">
+      Priority {priority}
+    </span>
+    <div class="action-item__meta">
+      <span class="action-item__effort" style={`--effort-color: ${effortColors[effort]};`}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        </svg>
+        {effort} Effort
+      </span>
+      <span class="action-item__timeline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+        {timeline}
+      </span>
+    </div>
+  </div>
+  <div class="action-item__content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .action-item {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--priority-color);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    margin-bottom: var(--space-4);
+    transition: box-shadow var(--transition-fast);
+  }
+
+  .action-item:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .action-item__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .action-item__priority {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-3);
+    background-color: var(--priority-bg);
+    color: var(--priority-color);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .action-item__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .action-item__effort {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--effort-color);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .action-item__timeline {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-text-muted);
+  }
+
+  .action-item__content {
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .action-item__content :global(p) {
+    margin-bottom: var(--space-2);
+  }
+
+  .action-item__content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .action-item__content :global(strong) {
+    font-weight: var(--font-weight-semibold);
+  }
+</style>

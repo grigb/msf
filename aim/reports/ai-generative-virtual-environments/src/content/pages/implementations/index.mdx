@@ -1,0 +1,204 @@
+---
+title: "Implementation Landscape"
+description: "Overview of AI-generated virtual environment tools and platforms with deep-dive profiles"
+section: "implementations"
+order: 4
+---
+
+import SRLBadge from '../../../components/SRLBadge.astro';
+import ImplementationCard from '../../../components/ImplementationCard.astro';
+import ComparisonTable from '../../../components/ComparisonTable.astro';
+
+
+
+## Top 10 Implementations
+
+Explore detailed profiles of the most significant implementations in the AI-generated virtual environments space.
+
+<div className="implementations-grid">
+
+<ImplementationCard
+  title="World Labs Marble"
+  org="World Labs (Fei-Fei Li)"
+  type="Commercial SaaS"
+  srl={5}
+  url="/implementations/world-labs-marble/"
+  description="First commercial world model with exportable geometry. GLB/PLY export. Spatial editing via Chisel."
+  image="/images/implementations/world-labs-marble-hero.png"
+/>
+
+<ImplementationCard
+  title="Google DeepMind Genie 3"
+  org="Google DeepMind"
+  type="Research"
+  srl={4}
+  url="/implementations/google-genie-3/"
+  description="Real-time interactivity. Single image to world. No 3D export - video only."
+  image="/images/implementations/google-genie-3-hero.jpg"
+/>
+
+<ImplementationCard
+  title="NVIDIA Cosmos"
+  org="NVIDIA"
+  type="Commercial Enterprise"
+  srl={5}
+  url="/implementations/nvidia-cosmos/"
+  description="Purpose-built for Physical AI. Native USD integration. 300K+ users."
+  image="/images/implementations/nvidia-cosmos-hero.jpg"
+/>
+
+<ImplementationCard
+  title="Meta Horizon Worlds + AI Suite"
+  org="Meta"
+  type="Commercial Platform"
+  srl={5}
+  url="/implementations/meta-horizon/"
+  description="Production since April 2024. Text-to-mesh, skybox, code. 31% increase in world publishes."
+/>
+
+<ImplementationCard
+  title="Roblox Cube 3D"
+  org="Roblox Corporation"
+  type="Open Source + Platform"
+  srl={5}
+  url="/implementations/roblox-cube/"
+  description="Open-sourced 1.8B parameter model. Runtime generation API. Largest training dataset."
+  image="/images/implementations/roblox-cube-hero.webp"
+/>
+
+<ImplementationCard
+  title="Meshy AI"
+  org="Meshy"
+  type="Commercial SaaS"
+  srl={6}
+  url="/implementations/meshy-ai/"
+  description="3M+ users. Best-in-class engine plugins. Full glTF compliance."
+  image="/images/implementations/meshy-ai-hero.webp"
+/>
+
+<ImplementationCard
+  title="Luma AI"
+  org="Luma AI"
+  type="Commercial SaaS"
+  srl={5}
+  url="/implementations/luma-ai/"
+  description="Neural representation pioneer. Gaussian splat native. 10+ language support."
+  image="/images/implementations/luma-ai-hero.jpg"
+/>
+
+<ImplementationCard
+  title="Meta WorldGen"
+  org="Meta AI Research"
+  type="Research"
+  srl={3}
+  url="/implementations/meta-worldgen/"
+  description="Only system with automatic navmesh. 4-stage pipeline. 50x50m worlds in ~5 min."
+  image="/images/implementations/meta-worldgen-hero.jpg"
+/>
+
+<ImplementationCard
+  title="Blockade Labs Skybox AI"
+  org="Blockade Labs"
+  type="Commercial SaaS"
+  srl={6}
+  url="/implementations/blockade-labs/"
+  description="1.5M+ users. Seconds to generate. Native Roblox integration."
+  image="/images/implementations/blockade-labs-hero.jpg"
+/>
+
+<ImplementationCard
+  title="Hyper3D Rodin"
+  org="Hyper3D"
+  type="Commercial SaaS"
+  srl={5}
+  url="/implementations/hyper3d-rodin/"
+  description="Focus on clean topology. Game-ready output. Full glTF compliance."
+  image="/images/implementations/hyper3d-rodin-hero.png"
+/>
+
+</div>
+
+---
+
+## Top 25 Noteworthy Implementations
+
+<ComparisonTable
+  columns={[
+    { key: "rank", label: "Rank" },
+    { key: "name", label: "Name" },
+    { key: "org", label: "Organization" },
+    { key: "type", label: "Type" },
+    { key: "diff", label: "Key Differentiator" },
+    { key: "srl", label: "SRL" },
+    { key: "url", label: "URL" }
+  ]}
+  data={[
+    { rank: 11, name: "CSM CommonSim-1", org: "Common Sense Machines", type: "Commercial", diff: "Text-to-4D (animated), controllable worlds", srl: 4, url: "csm.ai" },
+    { rank: 12, name: "Odyssey Explorer", org: "Odyssey", type: "Commercial", diff: "Real-time world streaming via sensor backpack data", srl: 4, url: "odyssey.systems" },
+    { rank: 13, name: "Decart Oasis", org: "Decart + Etched", type: "Commercial", diff: "Real-time playable worlds, custom AI hardware", srl: 4, url: "decart.ai" },
+    { rank: 14, name: "HunyuanWorld 1.0", org: "Tencent", type: "Open Source", diff: "First open-source simulation-capable 3D world gen", srl: 4, url: "github.com/Tencent-Hunyuan" },
+    { rank: 15, name: "Kaedim", org: "Kaedim", type: "Commercial", diff: "Human-in-loop (80+ artists) for quality assurance", srl: 5, url: "kaedim.com" },
+    { rank: 16, name: "Tripo AI", org: "Tripo", type: "Commercial", diff: "Fast text-to-3D, competitive with Meshy", srl: 5, url: "tripo3d.ai" },
+    { rank: 17, name: "Spline AI", org: "Spline", type: "Commercial", diff: "Browser-based 3D with AI generation", srl: 5, url: "spline.design" },
+    { rank: 18, name: "Scenario", org: "Scenario", type: "Commercial", diff: "Custom model training (5-100 refs)", srl: 5, url: "scenario.gg" },
+    { rank: 19, name: "Alpha3D", org: "Alpha3D", type: "Commercial", diff: "E-commerce product 3D conversion", srl: 5, url: "alpha3d.io" },
+    { rank: 20, name: "Promethean AI", org: "Promethean", type: "Commercial", diff: "AI scene assembly assistant (not generator)", srl: 5, url: "promethean-ai.com" },
+    { rank: 21, name: "OpenAI Shap-E", org: "OpenAI", type: "Open Source", diff: "Reference text/image-to-3D research", srl: 3, url: "github.com/openai/shap-e" },
+    { rank: 22, name: "Google DreamFusion", org: "Google Research", type: "Research", diff: "Score Distillation Sampling foundation", srl: 3, url: "Research paper" },
+    { rank: 23, name: "Masterpiece Studio", org: "Masterpiece", type: "Commercial", diff: "NVIDIA partnership, enterprise pipelines", srl: 5, url: "masterpiecestudio.com" },
+    { rank: 24, name: "Sloyd AI", org: "Sloyd", type: "Commercial", diff: "Runtime generation, deterministic from code", srl: 5, url: "sloyd.ai" },
+    { rank: 25, name: "InstaLOD", org: "InstaLOD", type: "Commercial", diff: "Mesh optimization with AI enhancement", srl: 6, url: "instalod.com" }
+  ]}
+/>
+
+### Extended List (26-35)
+
+| Rank | Name | Organization | Type | Key Differentiator | SRL |
+|------|------|--------------|------|-------------------|-----|
+| 26 | Unity Muse | Unity | Commercial | Platform-embedded AI (beta) | 4 |
+| 27 | Unreal PCG | Epic Games | Commercial | Procedural + AI hybrid framework | 5 |
+| 28 | Spatial (Analogue) | Analogue | Commercial | Collaborative 3D design on Vision Pro | 4 |
+| 29 | Hyperfy | Hyperfy | Open Source | Chat-to-world WebXR platform | 4 |
+| 30 | Oncyber Magic Composer | Oncyber | Commercial | GPT-powered text-to-world customization | 4 |
+| 31 | Rosebud AI | Rosebud | Commercial | AI game logic + Marble integration | 4 |
+| 32 | NVIDIA ACE | NVIDIA | Commercial | NPC AI (Audio2Face, dialog) | 5 |
+| 33 | Convai | Convai | Commercial | Real-time voice NPC conversations | 5 |
+| 34 | Inworld AI | Inworld | Commercial | Character AI with memory/emotions | 5 |
+| 35 | VRoid Studio | Pixiv | Free | Anime avatar generation | 6 |
+
+---
+
+## Implementation Landscape Gaps
+
+These gaps affect multiple implementations and represent opportunities for standards work:
+
+| Gap | Impact | Implementations Affected | Potential Solutions |
+|-----|--------|-------------------------|---------------------|
+| No cross-system generation metadata | **HIGH** | All systems | MSF-proposed glTF extension |
+| Video-based outputs non-exportable | **HIGH** | Genie 3, Oasis, Odyssey | Video-to-3D reconstruction research |
+| Gaussian splat format fragmentation | **HIGH** | Marble, Luma, neural tools | KHR_gaussian_splatting ratification |
+| Navmesh not generated (most systems) | MEDIUM | Marble, Meshy, most tools | In-engine generation required |
+| Physics mesh topology errors | **HIGH** | All geometry generators | Validation profiles + repair tools |
+| Platform lock-in (UGC platforms) | **HIGH** | Roblox, Meta Horizon | Interoperability standards pressure |
+| No determinism specification | MEDIUM | All systems | MSF multiplayer determinism work |
+
+
+---
+
+## Navigation
+
+- [Previous: Current Landscape](/landscape/)
+- [Next: Standards Inventory](/standards/)
+
+### Individual Implementation Profiles
+
+- [World Labs Marble](/implementations/world-labs-marble/)
+- [Google Genie 3](/implementations/google-genie-3/)
+- [NVIDIA Cosmos](/implementations/nvidia-cosmos/)
+- [Meta Horizon Worlds](/implementations/meta-horizon/)
+- [Roblox Cube 3D](/implementations/roblox-cube/)
+- [Meshy AI](/implementations/meshy-ai/)
+- [Luma AI](/implementations/luma-ai/)
+- [Meta WorldGen](/implementations/meta-worldgen/)
+- [Blockade Labs](/implementations/blockade-labs/)
+- [Hyper3D Rodin](/implementations/hyper3d-rodin/)

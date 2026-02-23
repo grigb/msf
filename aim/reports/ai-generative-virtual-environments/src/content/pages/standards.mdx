@@ -1,0 +1,204 @@
+---
+title: "Standards Inventory"
+description: "Existing, developing, and de facto standards for AI-generated virtual environments"
+section: "standards"
+order: 5
+---
+
+import SRLBadge from '../../components/SRLBadge.astro';
+import CoverageChart from '../../components/CoverageChart.astro';
+
+
+
+## Existing Standards
+
+These standards are finalized and have established adoption in the industry.
+
+| Standard | Organization | Status | Scope | Adoption |
+|----------|--------------|--------|-------|----------|
+| **glTF 2.0** | Khronos Group | Final | 3D asset interchange | High |
+| **OpenUSD** | AOUSD | Final (24.11) | Scene description, industrial | Medium |
+| **OpenXR** | Khronos Group | Final | XR device API | High |
+| **WebXR Device API** | W3C | Final | Web-based XR | Medium |
+| **VRM** | VRM Consortium | Final | Anime-style avatars | Medium (Japan) |
+| **ONNX** | LF AI | Final | ML model interchange | High |
+
+### glTF 2.0
+
+The **primary interchange format** for 3D assets with broad engine support.
+
+- **Scope:** Geometry, materials, textures, animations
+- **AI Relevance:** Most AI tools export to glTF
+- **Gap:** No AI generation metadata extension exists
+
+### OpenUSD
+
+The **emerging scene description standard** for complex scenes.
+
+- **Scope:** Scene composition, hierarchies, variants
+- **AI Relevance:** NVIDIA Cosmos native format
+- **Gap:** No AI generation schemas defined
+
+---
+
+## Standards in Development
+
+These standards are actively being developed and not yet finalized.
+
+| Standard | Organization | Expected Date | Scope | Relevance |
+|----------|--------------|---------------|-------|-----------|
+| **KHR_gaussian_splatting** | Khronos Group | Unknown (no timeline) | 3D Gaussian splat in glTF | Critical for neural representations |
+| **KHR_gaussian_splatting_compression_spz_2** | Khronos + Niantic | Unknown | SPZ compression for splats | Enables practical file sizes |
+| **KHR_interactivity** | Khronos Group | Draft | Behavior graphs in glTF | Partial affordance solution |
+| **OpenUSD Core Spec 1.0** | AOUSD | 2025-2026 | Foundational stability | Enterprise adoption driver |
+| **OpenUSD Physics Extension** | AOUSD | Exploring | Physics representation | Game engine alignment |
+
+
+### KHR_gaussian_splatting
+
+**Critical for this domain** - enables neural representation interchange.
+
+| Aspect | Status |
+|--------|--------|
+| Proposal | PR #2490 on GitHub |
+| Timeline | No ratification date |
+| Compression | SPZ_2 being developed |
+| Engine Support | Pending standard |
+
+### KHR_interactivity
+
+Provides **behavior graphs in glTF** - partial solution for affordances.
+
+| Aspect | Status |
+|--------|--------|
+| Status | Draft |
+| Scope | Visual behavior graphs |
+| Gap | No semantic vocabulary for affordances |
+
+---
+
+## De Facto Standards (Not Formalized)
+
+These practices are widely used but not formally standardized.
+
+| Practice | Origin | Adoption | Formalization Candidate? |
+|----------|--------|----------|-------------------------|
+| PLY for Gaussian splats | Academic convention | High (neural tools) | No - KHR_gaussian_splatting supersedes |
+| JSON generation parameters | Common practice | Medium | Yes - MSF could propose schema |
+| Seed-based reproducibility | Industry practice | High | Yes - MSF determinism work |
+| FBX for rigged assets | Autodesk proprietary | High | No - proprietary format |
+| SPZ compression | Niantic open source | Growing | Yes - being standardized via KHR |
+
+### JSON Generation Parameters
+
+Many tools export generation parameters as JSON, but with **no common schema**:
+
+```json
+// World Labs Marble (example)
+{
+  "prompt": "medieval castle courtyard",
+  "seed": 42,
+  "model_version": "2.1",
+  "generation_time_ms": 45000
+}
+
+// Meshy (different schema)
+{
+  "input_text": "medieval castle courtyard",
+  "random_seed": 42,
+  "meshy_version": "5.0"
+}
+```
+
+**Opportunity:** MSF could propose a unified schema for AI generation metadata.
+
+---
+
+## Standards Coverage Map
+
+<CoverageChart
+  title="Standards Coverage by Domain"
+  categories={[
+    {
+      name: "Core 3D",
+      items: [
+        { id: "geo", label: "3D Geometry", coverage: 100, status: "full", details: "glTF, USD, FBX" },
+        { id: "mat", label: "Textures/Materials", coverage: 100, status: "full", details: "glTF PBR, MaterialX" }
+      ]
+    },
+    {
+      name: "AI-Specific",
+      items: [
+        { id: "neural", label: "Neural Representations (3DGS)", coverage: 40, status: "partial", details: "KHR_gaussian_splatting (draft)" },
+        { id: "metadata", label: "AI Generation Metadata", coverage: 0, status: "none", details: "No standard exists" }
+      ]
+    },
+    {
+      name: "Runtime",
+      items: [
+        { id: "physics", label: "Physics/Collision", coverage: 60, status: "partial", details: "PhysX, Bullet (impl only)" },
+        { id: "navmesh", label: "Navigation Mesh", coverage: 40, status: "partial", details: "Recast (impl only)" },
+        { id: "afford", label: "Affordances", coverage: 20, status: "minimal", details: "KHR_interactivity (draft)" }
+      ]
+    },
+    {
+      name: "Provenance",
+      items: [
+        { id: "prov", label: "3D Provenance", coverage: 0, status: "none", details: "C2PA lacks 3D support" },
+        { id: "determ", label: "Determinism", coverage: 0, status: "none", details: "No standard exists" },
+        { id: "world", label: "World Package", coverage: 0, status: "none", details: "No standard exists" }
+      ]
+    }
+  ]}
+/>
+
+
+### Critical Gaps (0% Coverage)
+
+1. **AI Generation Metadata** - No standard schema for prompts, seeds, model versions
+2. **3D Provenance** - C2PA covers images/video but not 3D formats
+3. **Determinism** - No specification for reproducible generation across systems
+4. **World Package** - No portable format for complete AI-generated worlds
+
+### Partial Coverage (20-60%)
+
+1. **Neural Representations** - KHR_gaussian_splatting in draft
+2. **Affordances** - KHR_interactivity provides partial solution
+3. **Navigation Mesh** - Recast is de facto but not standardized
+4. **Physics** - Engine implementations only, no interchange standard
+
+### Full Coverage (100%)
+
+1. **3D Geometry** - glTF, USD, FBX well-established
+2. **Textures/Materials** - PBR workflow standardized
+
+---
+
+## Standards by SDO
+
+### Khronos Group
+- glTF 2.0 (Final)
+- OpenXR (Final)
+- KHR_gaussian_splatting (Draft)
+- KHR_interactivity (Draft)
+
+### AOUSD (Alliance for OpenUSD)
+- OpenUSD Core Spec (24.11)
+- Physics Extension (Exploring)
+
+### W3C
+- WebXR Device API (Final)
+- WebGPU (Developing)
+
+### C2PA Coalition
+- Content Authenticity Spec (No 3D support)
+
+### LF AI
+- ONNX (Final)
+
+---
+
+## Navigation
+
+- [Previous: Implementation Landscape](/implementations/)
+- [Next: Gap Analysis](/gaps/)

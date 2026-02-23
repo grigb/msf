@@ -1,0 +1,252 @@
+---
+title: "Recommendations"
+description: "Actionable recommendations for MSF, SDO coordination, and research priorities"
+section: "recommendations"
+order: 9
+---
+
+import ActionItem from '../../components/ActionItem.astro';
+import PriorityTable from '../../components/PriorityTable.astro';
+
+
+
+## For MSF Working Group
+
+These are the prioritized recommendations for MSF AI x Metaverse Working Group action.
+
+<ActionItem priority={1} effort="MEDIUM" timeline="Q2 2026">
+**Propose MSF_ai_generation_metadata glTF extension**
+
+No existing work addresses AI generation metadata. This is a greenfield opportunity with high impact on reproducibility and interoperability.
+
+**Scope:**
+- Generation prompt/parameters
+- Seed and random state
+- Model version and configuration
+- Quality metrics
+- Generation timestamp
+
+**Path:** Vendor extension -> KHR ratification
+</ActionItem>
+
+<ActionItem priority={2} effort="MEDIUM" timeline="Q3 2026">
+**Define geometry quality validation profiles**
+
+Addresses topology errors that block production use. Enables certification of AI-generated content.
+
+**Scope:**
+- Non-manifold detection
+- Physics compatibility checks
+- UV quality assessment
+- LOD requirements
+- Polygon budget compliance
+</ActionItem>
+
+<ActionItem priority={3} effort="LOW" timeline="Q1 2026">
+**Formally engage C2PA for 3D workflow support**
+
+Critical gap in provenance tracking. MSF can advocate on behalf of the industry.
+
+**Scope:**
+- Establish MSF liaison with C2PA
+- Document 3D workflow requirements
+- Propose glTF/USD embedding mechanisms
+</ActionItem>
+
+<ActionItem priority={4} effort="LOW" timeline="Ongoing">
+**Support KHR_gaussian_splatting ratification**
+
+Enable neural representation interchange. Monitor and contribute to Khronos work.
+
+**Scope:**
+- Track PR #2490 progress
+- Contribute use cases from AI generation
+- Support compression work (SPZ_2)
+</ActionItem>
+
+<ActionItem priority={5} effort="HIGH" timeline="Q4 2026">
+**Convene world package format discussion**
+
+Complex multi-SDO coordination needed. MSF is uniquely positioned to facilitate.
+
+**Scope:**
+- Bring together Khronos, AOUSD stakeholders
+- Define requirements for portable world packaging
+- Identify lead SDO and scope
+</ActionItem>
+
+---
+
+## Priority Summary Table
+
+| Priority | Recommendation | Rationale | Effort | Timeline |
+|----------|----------------|-----------|--------|----------|
+| 1 | Propose MSF_ai_generation_metadata glTF extension | No existing work; greenfield opportunity; high impact | MEDIUM | Q2 2026 |
+| 2 | Define geometry quality validation profiles | Addresses topology errors blocking production use | MEDIUM | Q3 2026 |
+| 3 | Formally engage C2PA for 3D workflow support | Critical gap; MSF can advocate on behalf of industry | LOW | Q1 2026 |
+| 4 | Support KHR_gaussian_splatting ratification | Enable neural representation interchange | LOW | Ongoing |
+| 5 | Convene world package format discussion | Complex multi-SDO coordination; MSF uniquely positioned | HIGH | Q4 2026 |
+
+---
+
+## Coordination Opportunities
+
+These are opportunities for MSF to coordinate between SDOs and industry.
+
+| Opportunity | SDOs Involved | MSF Role | Expected Outcome |
+|-------------|---------------|----------|------------------|
+| **AI Generation Metadata Extension** | Khronos, MSF | Convene, propose requirements | Vendor extension -> KHR path |
+| **C2PA 3D Workflow** | C2PA, Khronos | Facilitate, advocate | 3D embedding specification |
+| **Neural-to-Mesh Conversion** | Khronos, AOUSD | Observe, contribute use cases | Quality standards for conversion |
+| **Multiplayer Determinism** | MSF (new) | Lead | Requirements specification |
+
+
+### AI Generation Metadata Extension
+
+**Current State:** No work exists
+**MSF Role:** Lead proposal
+
+Steps:
+1. Draft requirements document (Q1 2026)
+2. Propose vendor extension to Khronos (Q2 2026)
+3. Gather implementer feedback (Q2-Q3 2026)
+4. Path to KHR ratification (2027+)
+
+### C2PA 3D Workflow
+
+**Current State:** No 3D support in C2PA
+**MSF Role:** Advocate
+
+Steps:
+1. Establish liaison (Q1 2026)
+2. Document requirements
+3. Propose embedding mechanisms
+4. Support specification work
+
+### Multiplayer Determinism
+
+**Current State:** No specification exists
+**MSF Role:** New work item
+
+Steps:
+1. Define problem scope
+2. Research technical feasibility
+3. Draft requirements
+4. Identify implementation partners
+
+---
+
+## Research Priorities
+
+These research questions should be addressed to inform standards work.
+
+| Priority | Research Question | Method | Resources Needed |
+|----------|------------------|--------|------------------|
+| 1 | What metadata is essential for AI generation reproducibility? | Creator surveys, workflow analysis | 3-month study, industry partners |
+| 2 | What topology quality thresholds are acceptable for physics? | Benchmark with game studios | Technical study, engine expertise |
+| 3 | Can deterministic generation be achieved across GPU vendors? | Technical feasibility study | NVIDIA, AMD, Intel engagement |
+
+### Research Question 1: Essential Metadata
+
+**Why it matters:** Informs MSF_ai_generation_metadata schema design
+
+**Approach:**
+- Survey creators using AI generation tools
+- Analyze existing metadata exports from tools
+- Identify minimum viable metadata set
+- Validate with reproducibility testing
+
+### Research Question 2: Topology Quality Thresholds
+
+**Why it matters:** Defines quality validation profiles
+
+**Approach:**
+- Partner with game studios
+- Test AI-generated meshes in production engines
+- Measure physics failure rates
+- Define acceptable thresholds
+
+### Research Question 3: Deterministic Generation
+
+**Why it matters:** Enables multiplayer AI-generated content
+
+**Approach:**
+- Technical review of AI model architectures
+- GPU vendor consultation
+- Test reproducibility across hardware
+- Document achievable determinism levels
+
+---
+
+## Use Case Development
+
+These use cases should be prioritized for standards work.
+
+| Use Case | Priority | Readiness | Dependencies |
+|----------|----------|-----------|--------------|
+| **Batch AI World Generation for Games** | HIGH | Ready | Quality validation profiles |
+| **Runtime AI Environment Generation** | MEDIUM | Needs Research | Determinism specification |
+| **AI Generation Metadata Interchange** | HIGH | Ready | Extension proposal |
+| **Neural-to-Mesh Conversion Workflows** | HIGH | Blocked | KHR_gaussian_splatting ratification |
+
+
+### Batch AI World Generation
+
+**Status:** Ready for standards work
+**Blocking:** Quality validation profiles
+
+Use case: Game developers generate world assets via AI tools, then import into engines for production use.
+
+### Runtime AI Generation
+
+**Status:** Needs research
+**Blocking:** Determinism specification
+
+Use case: Games generate content at runtime using AI, requiring reproducibility for multiplayer synchronization.
+
+### AI Metadata Interchange
+
+**Status:** Ready for standards work
+**Blocking:** Extension proposal
+
+Use case: AI-generated assets carry metadata about generation parameters, enabling reproducibility and provenance.
+
+### Neural-to-Mesh Conversion
+
+**Status:** Blocked
+**Blocking:** KHR_gaussian_splatting ratification
+
+Use case: Content created in neural-native tools (Gaussian splats) converted to mesh for engine use.
+
+---
+
+## Roadmap Summary
+
+
+### Q1 2026
+- Establish C2PA liaison
+- Begin metadata research study
+
+### Q2 2026
+- Propose MSF_ai_generation_metadata extension
+- Complete metadata research
+
+### Q3 2026
+- Define quality validation profiles
+- Begin topology threshold study
+
+### Q4 2026
+- Convene world package format discussion
+- Complete quality research
+
+### 2027+
+- Path KHR ratification for AI metadata
+- Address world package format
+- Support C2PA 3D specification
+
+---
+
+## Navigation
+
+- [Previous: Maturity Assessment](/maturity/)
+- [Next: Appendices](/appendices/)

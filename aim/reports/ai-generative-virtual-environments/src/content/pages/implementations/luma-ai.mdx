@@ -1,0 +1,158 @@
+---
+title: "Luma AI (Genie and Dream Machine)"
+description: "Neural representation pioneer with Gaussian splat native output"
+section: "implementations"
+order: 4.7
+image: "/images/implementations/luma-ai-hero.jpg"
+---
+
+import SRLBadge from '../../../components/SRLBadge.astro';
+import CapabilityTable from '../../../components/CapabilityTable.astro';
+import StandardsCompliance from '../../../components/StandardsCompliance.astro';
+
+
+
+## Basic Information
+
+| Attribute | Value |
+|-----------|-------|
+| **Organization** | Luma AI |
+| **Type** | Commercial SaaS |
+| **Launch Date** | Genie 2023, Dream Machine 2024 |
+| **Current Version** | Genie, Dream Machine 1.6 |
+| **URL** | [lumalabs.ai](https://lumalabs.ai) |
+| **Pricing** | Free tier with attribution, paid tiers |
+
+<SRLBadge level={5} label="SRL-5: Early Adoption" />
+
+---
+
+## Capability Profile
+
+| Capability | Support | Notes |
+|------------|---------|-------|
+| Text-to-3D | **Full** | Via Genie |
+| Video-to-3D | **Full** | NeRF-based reconstruction |
+| Gaussian Splat Output | **Full** | Native representation |
+| Mesh Export | Partial | Quality loss in conversion |
+| Video Generation | **Full** | Dream Machine for video |
+
+
+---
+
+## Standards Compliance
+
+| Standard | Compliance | Notes |
+|----------|------------|-------|
+| **glTF 2.0** | Partial | Mesh export available |
+| **PLY** | **Full** | Gaussian splat export |
+| **Proprietary** | Full | Native Luma format |
+
+**Key characteristic:** Gaussian splat native - mesh is secondary output.
+
+---
+
+## Maturity Assessment
+
+**SRL Score:** SRL-5 (Early Adoption)
+
+**Evidence:**
+- Pioneered consumer-accessible neural 3D capture
+- Genie supports **10+ languages**
+- Free tier with attribution requirement drives widespread adoption
+
+---
+
+## Interoperability
+
+| Aspect | Details |
+|--------|---------|
+| **Export Formats** | GLB, PLY (splats), OBJ, FBX |
+| **Import Formats** | Text, images, video |
+| **API Availability** | Yes (commercial tiers) |
+| **Known Integrations** | Unity (via plugins), Unreal (via plugins), web viewers |
+
+---
+
+## Strengths
+
+1. **Neural representation pioneer** - High visual quality via Gaussian splats
+
+2. **Accessible free tier** - Enables widespread experimentation with attribution requirement
+
+3. **Multi-language support** - 10+ languages broadens global accessibility
+
+
+---
+
+## Limitations
+
+1. **Quality loss in conversion** - ~15% visual quality loss when converting splats to mesh
+
+2. **Custom renderers required** - Neural formats need specialized rendering in game engines
+
+3. **No physics or interaction** - Pure visual representation; no collision or navmesh
+
+---
+
+## Neural vs. Traditional Output
+
+
+### Gaussian Splat (Native)
+- Millions of Gaussian particles
+- Photorealistic rendering
+- ~15% quality loss when converted to mesh
+- Requires custom renderers
+
+### Mesh Export (Converted)
+- Traditional triangulated geometry
+- Compatible with standard engines
+- Lower visual fidelity than splats
+- Physics-capable
+
+---
+
+## Product Suite
+
+### Genie (Text/Image to 3D)
+- Text-to-3D generation
+- Image-to-3D reconstruction
+- Multi-language prompts
+- Free with attribution
+
+### Dream Machine (Video Generation)
+- Text-to-video
+- Image-to-video
+- 1.6 version current
+- Separate from 3D pipeline
+
+
+---
+
+## Output Gallery
+
+
+
+---
+
+## MSF Relevance
+
+Luma AI is representative of the **"neural-native" path** producing Gaussian splats rather than traditional meshes. This highlights:
+
+1. **Critical need for KHR_gaussian_splatting** - Standard format for neural representations
+
+2. **Neural-to-mesh conversion standards** - Quality preservation during conversion
+
+3. **Rendering pipeline considerations** - How to integrate neural assets in game engines
+
+4. **Quality validation challenges** - How to measure quality for non-traditional geometry
+
+**Key insight:** The future likely involves both neural and mesh representations coexisting, requiring interoperability standards between them.
+
+---
+
+## Navigation
+
+- [Previous: Meshy AI](/implementations/meshy-ai/)
+- [Next: Meta WorldGen](/implementations/meta-worldgen/)
+- [Back to Implementations Overview](/implementations/)

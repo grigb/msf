@@ -1,0 +1,99 @@
+---
+title: "AI-Generated Virtual Environments"
+description: "MSF Research Report on AI systems that generate complete, interactive 3D environments for games, metaverse platforms, and simulation"
+section: "home"
+order: 1
+---
+
+import SRLBadge from '../../components/SRLBadge.astro';
+import KeyFindingCard from '../../components/KeyFindingCard.astro';
+import ActionItem from '../../components/ActionItem.astro';
+
+
+
+**Report ID:** MSF-RR-AIGENV-2026-v1
+**Date:** 2026-01-26
+**Lead Researcher:** AI x Metaverse Working Group
+**Research Period:** December 2025 - January 2026
+
+---
+
+## Domain Definition
+
+AI-Generated Virtual Environments encompasses AI systems that generate complete, interactive 3D environments for games, metaverse platforms, and simulation, spanning both **video-based world models** (which output interactive video streams) and **geometry-based generators** (which output exportable 3D assets).
+
+<SRLBadge level={4} label="Overall Maturity: Pilot" />
+
+---
+
+## Key Findings
+
+<div className="key-findings-grid">
+
+<KeyFindingCard number={1} title="Two Paradigms Coexist with Incompatible Outputs">
+The domain is fundamentally split between video-based world models (Genie 3, Oasis) that generate real-time interactive streams but cannot export 3D geometry, and geometry-based systems (Marble, WorldGen, Meshy) that produce game-engine-compatible assets but require minutes to hours of generation time. **No bridge exists between these paradigms**, creating a significant standards opportunity.
+</KeyFindingCard>
+
+<KeyFindingCard number={2} title="Standards Infrastructure is Critically Underdeveloped">
+Key standards are far less mature than commonly assumed. C2PA has no 3D format support, no AI-specific glTF extensions exist, OpenUSD has no AI generation schemas, and KHR_gaussian_splatting remains an experimental draft with no ratification timeline.
+</KeyFindingCard>
+
+<KeyFindingCard number={3} title="Production Quality Requires Human Intervention">
+Despite marketing claims, all current systems require **10-30 hours of manual cleanup per scene** for production use. Generated meshes suffer from non-manifold geometry, topology errors, and physics incompatibility that breaks standard collision detection.
+</KeyFindingCard>
+
+<KeyFindingCard number={4} title="Robotics is Driving Innovation More Than Gaming">
+NVIDIA Cosmos and similar "Physical AI" systems designed for robotics training are advancing faster than consumer-focused tools. The MSF definition of metaverse (including machines as consumers) positions this as within scope.
+</KeyFindingCard>
+
+<KeyFindingCard number={5} title="Interoperability is the Primary Blocker">
+Each major system (Marble, Genie 3, Cosmos, WorldGen) uses proprietary formats and APIs. Even among geometry-based systems, output formats (Gaussian splats vs. trimesh) are incompatible, and engine support (Unity/Unreal) relies on third-party plugins.
+</KeyFindingCard>
+
+</div>
+
+---
+
+## Standards Readiness Assessment
+
+| Dimension | Score | Summary |
+|-----------|-------|---------|
+| **Overall Maturity** | SRL-4 | Pilot stage |
+| **Standardization Priority** | HIGH | Urgent action needed |
+| **Primary Gap** | Critical | No cross-platform schema for AI generation metadata, reproducibility parameters, or portable world packaging |
+
+
+---
+
+## Recommended MSF Actions
+
+<ActionItem priority={1} effort="MEDIUM" timeline="Q2 2026">
+**Propose a glTF extension for AI generation metadata** (MSF_ai_generation_metadata) covering prompts, seeds, model versions, and quality metrics.
+</ActionItem>
+
+<ActionItem priority={2} effort="LOW" timeline="Q1 2026">
+**Advocate to C2PA Coalition for 3D workflow support**, including glTF and USD embedding mechanisms for provenance tracking.
+</ActionItem>
+
+<ActionItem priority={3} effort="HIGH" timeline="Q4 2026">
+**Convene an interoperability working session** bringing together World Labs, NVIDIA, Meta, and Khronos to address neural-to-mesh conversion standards.
+</ActionItem>
+
+---
+
+## Report Navigation
+
+Explore the full research report:
+
+- [Domain Scope & Definitions](/scope/) - What's in scope, terminology
+- [Current Landscape](/landscape/) - Technology paradigms and readiness
+- [Implementation Deep-Dives](/implementations/) - Top 10 tools analyzed
+- [Standards Inventory](/standards/) - Existing and developing standards
+- [Gap Analysis](/gaps/) - Where standards are missing
+- [SDO Coordination](/coordination/) - Who's working on what
+- [Maturity Assessment](/maturity/) - SRL scores and trajectory
+- [Recommendations](/recommendations/) - Actionable next steps
+- [Appendices](/appendices/) - Full data and methodology
+
+---
+

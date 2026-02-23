@@ -1,0 +1,12 @@
+# Placeholder for Astro components
+# Planned components:
+# - ImplementationCard.astro - Tool profile preview cards
+# - SRLBadge.astro - Maturity level indicator badges
+# - ComparisonTable.astro - Sortable/filterable data tables
+# - VideoEmbed.astro - YouTube/Vimeo with offline fallback
+# - ModelViewer.astro - 3D model display (model-viewer)
+# - ImageGallery.astro - Lightbox for screenshots
+# - SearchBox.astro - Pagefind search integration
+# - FilterPanel.astro - Implementation filters
+# - Tabs.astro - Tabbed content sections
+# - Accordion.astro - Expandable sections

@@ -1,0 +1,85 @@
+---
+/**
+ * KeyFindingCard.astro
+ * Card for displaying key research findings - navy blue left border accent
+ */
+
+interface Props {
+  number: number;
+  title: string;
+}
+
+const { number, title } = Astro.props;
+---
+
+<div class="key-finding-card">
+  <div class="key-finding-card__header">
+    <span class="key-finding-card__number">{String(number).padStart(2, '0')}</span>
+    <h3 class="key-finding-card__title">{title}</h3>
+  </div>
+  <div class="key-finding-card__content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .key-finding-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    padding: var(--space-5) var(--space-6);
+    margin-bottom: var(--space-4);
+    transition: box-shadow var(--transition-base), border-color var(--transition-base);
+  }
+
+  .key-finding-card:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .key-finding-card__header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-3);
+  }
+
+  .key-finding-card__number {
+    flex-shrink: 0;
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    line-height: 1;
+    opacity: 0.5;
+    min-width: 2ch;
+  }
+
+  .key-finding-card__title {
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-heading);
+    line-height: var(--line-height-tight);
+    margin: 0;
+  }
+
+  .key-finding-card__content {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: var(--line-height-relaxed);
+    padding-left: calc(2ch + var(--space-4));
+  }
+
+  .key-finding-card__content :global(p) {
+    margin-bottom: var(--space-2);
+  }
+
+  .key-finding-card__content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .key-finding-card__content :global(strong) {
+    color: var(--color-text-heading);
+  }
+</style>

@@ -1,0 +1,78 @@
+---
+/**
+ * SRLScale.astro
+ * Visual representation of the Standards Readiness Level scale
+ */
+
+interface Props {
+  highlight?: number;
+}
+
+const { highlight } = Astro.props;
+
+const levels = [
+  { level: 1, name: 'Concept', color: 'var(--srl-1-2)' },
+  { level: 2, name: 'Research', color: 'var(--srl-1-2)' },
+  { level: 3, name: 'Prototype', color: 'var(--srl-3-4)' },
+  { level: 4, name: 'Pilot', color: 'var(--srl-3-4)' },
+  { level: 5, name: 'Early', color: 'var(--srl-5-6)' },
+  { level: 6, name: 'Growth', color: 'var(--srl-5-6)' },
+  { level: 7, name: 'Mainstream', color: 'var(--srl-7-8)' },
+  { level: 8, name: 'Mature', color: 'var(--srl-7-8)' },
+  { level: 9, name: 'Universal', color: 'var(--srl-9)' },
+];
+---
+
+<div class="srl-scale">
+  <div class="srl-scale__levels">
+    {levels.map(l => (
+      <div
+        class={`srl-scale__level ${highlight === l.level ? 'srl-scale__level--active' : ''}`}
+        style={`--level-color: ${l.color}`}
+      >
+        <span class="srl-scale__number">{l.level}</span>
+        <span class="srl-scale__name">{l.name}</span>
+      </div>
+    ))}
+  </div>
+  <slot />
+</div>
+
+<style>
+  .srl-scale {
+    margin: var(--space-4) 0;
+  }
+
+  .srl-scale__levels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .srl-scale__level {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-fast);
+  }
+
+  .srl-scale__level--active {
+    background-color: var(--level-color);
+    border-color: var(--level-color);
+    color: white;
+  }
+
+  .srl-scale__number {
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-family-mono);
+  }
+
+  .srl-scale__name {
+    color: inherit;
+  }
+</style>

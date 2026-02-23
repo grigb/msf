@@ -1,0 +1,114 @@
+---
+title: "Current State Assessment"
+description: "Technology landscape overview, paradigm map, and readiness assessment for AI-generated virtual environments"
+section: "landscape"
+order: 3
+---
+
+import SRLBadge from '../../components/SRLBadge.astro';
+import ReadinessChart from '../../components/ReadinessChart.astro';
+
+
+
+## Technology Landscape Overview
+
+The AI-generated virtual environments landscape underwent a **paradigm shift in 2024-2025** with the emergence of "world models" as distinct from traditional 3D asset generators. Where previous years focused on single-object text-to-3D (Meshy, Tripo, Luma Genie), the field now includes systems capable of generating complete interactive environments from text, image, or video inputs.
+
+### The Fundamental Bifurcation
+
+The landscape is bifurcated between two fundamentally different approaches:
+
+<div className="paradigm-comparison">
+
+#### Video-Based World Models
+- **Examples:** Google DeepMind's Genie 3, Decart's Oasis, Odyssey
+- **Method:** Generate interactive video streams frame-by-frame using next-token prediction
+- **Strength:** Real-time interactivity and infinite variation
+- **Limitation:** Produce no exportable 3D geometry
+
+#### Geometry-Based Systems
+- **Examples:** World Labs Marble, Meta WorldGen, traditional 3D generators
+- **Method:** Output meshes, Gaussian splats, or USD files
+- **Strength:** Compatible with game engines
+- **Limitation:** Require minutes to hours of generation time
+
+</div>
+
+
+### Platform Integration
+
+Major metaverse platforms are rapidly integrating AI generation capabilities:
+
+| Platform | Status | Key Feature |
+|----------|--------|-------------|
+| **Meta Horizon Worlds** | Production since April 2024 | Text-to-mesh generation, 31% increase in world publishes |
+| **Roblox** | Open-sourced Cube 3D (GDC March 2025) | 1.8B parameter foundation model |
+| **NVIDIA Omniverse** | Production | "Physical AI" with Cosmos World Foundation Models |
+
+### The Quality-Speed Tradeoff
+
+The quality-vs-speed tradeoff remains fundamental:
+
+| System Type | Speed | Exportability | Example |
+|-------------|-------|---------------|---------|
+| Real-time | 720p/24fps | No 3D export | Genie 3 |
+| Batch | 5 min - hours | Engine compatible | Marble, WorldGen |
+
+**No system currently bridges both requirements.**
+
+---
+
+## Paradigm Map
+
+| Paradigm | Description | Maturity | Trajectory |
+|----------|-------------|----------|------------|
+| **Video-Based World Models** | Generate interactive video streams frame-by-frame; no 3D export; real-time capable | <SRLBadge level={4} /> | Growing (Google, Decart, Odyssey investing) |
+| **Geometry-Native Generators** | Output meshes/USD compatible with game engines; batch generation | <SRLBadge level={5} /> | Growing (World Labs, Meta, NVIDIA) |
+| **Neural Representations (3DGS)** | Gaussian splat output; photorealistic but requires custom renderers | <SRLBadge level={4} /> | Growing (Luma AI, World Labs) |
+| **Platform-Embedded AI** | AI tools built into metaverse platforms (Roblox, Meta Horizon) | <SRLBadge level={5} /> | Mainstream trajectory |
+| **Hybrid PCG+AI** | Combines procedural generation with AI enhancement | <SRLBadge level={5} /> | Stable (Unreal PCG, Unity Muse) |
+
+---
+
+## Technology Readiness Summary
+
+<ReadinessChart
+  data={[
+    { name: "Video World Models", level: 4, description: "Research/Pilot" },
+    { name: "Geometry Generators", level: 5, description: "Early Adoption" },
+    { name: "Neural Formats (3DGS)", level: 3, description: "Prototype/Draft" },
+    { name: "Platform AI Tools", level: 5, description: "Early Production" },
+    { name: "Generation Metadata", level: 2, description: "Research Only" },
+    { name: "Interoperability", level: 3, description: "Fragmented" }
+  ]}
+/>
+
+
+### Key Observations
+
+1. **Generation Metadata** is the least mature area (SRL-2) - representing a greenfield opportunity for MSF standards work
+
+2. **Interoperability** remains fragmented (SRL-3) - each major system uses proprietary formats
+
+3. **Platform AI Tools** have reached early production (SRL-5) - demonstrating market readiness
+
+4. **Neural Formats** lag behind traditional geometry (SRL-3 vs SRL-5) - KHR_gaussian_splatting still in draft
+
+---
+
+## Implications for Standards
+
+The bifurcation between video-based and geometry-based paradigms means:
+
+- **Video-based systems cannot be addressed by traditional 3D standards** - they output pixel streams, not geometry
+- **Geometry-based systems can leverage existing standards** (glTF, USD) but need AI-specific extensions
+- **Neural representations (3DGS) require new standards** that are only now being drafted
+- **Generation metadata has no standards coverage** - the highest priority gap
+
+
+---
+
+## Navigation
+
+- [Previous: Domain Scope](/scope/)
+- [Next: Implementation Deep-Dives](/implementations/)

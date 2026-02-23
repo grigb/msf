@@ -1,0 +1,298 @@
+---
+/**
+ * ComparisonTable.astro
+ * Data table with sorting capability
+ */
+
+interface Column {
+  key: string;
+  label: string;
+  sortable?: boolean;
+  align?: 'left' | 'center' | 'right';
+  width?: string;
+  render?: (value: unknown, row: Record<string, unknown>) => string;
+}
+
+interface Props {
+  data: Record<string, unknown>[];
+  columns: Column[];
+  sortable?: boolean;
+  caption?: string;
+  id?: string;
+}
+
+const {
+  data,
+  columns,
+  sortable = true,
+  caption,
+  id = `table-${Math.random().toString(36).slice(2, 9)}`
+} = Astro.props;
+---
+
+<div class="comparison-table" data-table-wrapper>
+  {caption && <p class="comparison-table__caption">{caption}</p>}
+
+  <div class="comparison-table__scroll">
+    <table class="comparison-table__table" id={id}>
+      <thead class="comparison-table__head">
+        <tr>
+          {columns.map(col => (
+            <th
+              class="comparison-table__th"
+              style={col.width ? `width: ${col.width}` : undefined}
+              data-align={col.align || 'left'}
+              data-sortable={sortable && col.sortable !== false ? 'true' : undefined}
+              data-key={col.key}
+            >
+              <span class="comparison-table__th-content">
+                {col.label}
+                {sortable && col.sortable !== false && (
+                  <button
+                    class="comparison-table__sort-btn"
+                    type="button"
+                    aria-label={`Sort by ${col.label}`}
+                    data-sort-btn
+                  >
+                    <svg class="comparison-table__sort-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path class="sort-asc" d="M8 4L12 8H4L8 4Z" fill="currentColor" opacity="0.3"/>
+                      <path class="sort-desc" d="M8 12L4 8H12L8 12Z" fill="currentColor" opacity="0.3"/>
+                    </svg>
+                  </button>
+                )}
+              </span>
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody class="comparison-table__body">
+        {data.map((row, rowIndex) => (
+          <tr class="comparison-table__row" data-row-index={rowIndex}>
+            {columns.map(col => (
+              <td
+                class="comparison-table__td"
+                data-align={col.align || 'left'}
+                data-label={col.label}
+              >
+                {col.render
+                  ? <Fragment set:html={col.render(row[col.key], row)} />
+                  : row[col.key]
+                }
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="comparison-table__info">
+    <span class="comparison-table__count">
+      Showing <strong>{data.length}</strong> items
+    </span>
+  </div>
+</div>
+
+<style>
+  .comparison-table {
+    width: 100%;
+  }
+
+  .comparison-table__caption {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .comparison-table__scroll {
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .comparison-table__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+  }
+
+  .comparison-table__head {
+    background-color: var(--color-surface-alt);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  .comparison-table__th {
+    padding: var(--space-3) var(--space-4);
+    font-weight: 600;
+    color: var(--color-text);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+  }
+
+  .comparison-table__th[data-align="center"] {
+    text-align: center;
+  }
+
+  .comparison-table__th[data-align="right"] {
+    text-align: right;
+  }
+
+  .comparison-table__th-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .comparison-table__th[data-align="center"] .comparison-table__th-content {
+    justify-content: center;
+  }
+
+  .comparison-table__th[data-align="right"] .comparison-table__th-content {
+    justify-content: flex-end;
+  }
+
+  .comparison-table__sort-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-1);
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: all var(--transition-fast);
+  }
+
+  .comparison-table__sort-btn:hover {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  .comparison-table__th[data-sort="asc"] .sort-asc,
+  .comparison-table__th[data-sort="desc"] .sort-desc {
+    opacity: 1;
+  }
+
+  .comparison-table__row {
+    transition: background-color var(--transition-fast);
+  }
+
+  .comparison-table__row:hover {
+    background-color: var(--color-surface-alt);
+  }
+
+  .comparison-table__row:not(:last-child) .comparison-table__td {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .comparison-table__td {
+    padding: var(--space-3) var(--space-4);
+    color: var(--color-text);
+    vertical-align: middle;
+  }
+
+  .comparison-table__td[data-align="center"] {
+    text-align: center;
+  }
+
+  .comparison-table__td[data-align="right"] {
+    text-align: right;
+  }
+
+  .comparison-table__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3) 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  /* Responsive: stack cells on mobile */
+  @media (max-width: 640px) {
+    .comparison-table__head {
+      display: none;
+    }
+
+    .comparison-table__row {
+      display: block;
+      padding: var(--space-4);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .comparison-table__td {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-2) 0;
+      border: none !important;
+    }
+
+    .comparison-table__td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      margin-right: var(--space-4);
+    }
+
+    .comparison-table__td[data-align="center"],
+    .comparison-table__td[data-align="right"] {
+      text-align: right;
+    }
+  }
+</style>
+
+<script>
+  // Table sorting functionality
+  document.querySelectorAll('[data-table-wrapper]').forEach(wrapper => {
+    const table = wrapper.querySelector('table');
+    const headers = wrapper.querySelectorAll('th[data-sortable]');
+    const tbody = table?.querySelector('tbody');
+
+    if (!table || !tbody) return;
+
+    headers.forEach(header => {
+      const sortBtn = header.querySelector('[data-sort-btn]');
+      const key = header.getAttribute('data-key');
+
+      sortBtn?.addEventListener('click', () => {
+        const currentSort = header.getAttribute('data-sort');
+        const newSort = currentSort === 'asc' ? 'desc' : 'asc';
+
+        // Reset all headers
+        headers.forEach(h => h.removeAttribute('data-sort'));
+
+        // Set new sort
+        header.setAttribute('data-sort', newSort);
+
+        // Sort rows
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort((a, b) => {
+          const aCell = a.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`);
+          const bCell = b.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`);
+
+          const aVal = aCell?.textContent?.trim() || '';
+          const bVal = bCell?.textContent?.trim() || '';
+
+          // Try numeric sort first
+          const aNum = parseFloat(aVal);
+          const bNum = parseFloat(bVal);
+
+          if (!isNaN(aNum) && !isNaN(bNum)) {
+            return newSort === 'asc' ? aNum - bNum : bNum - aNum;
+          }
+
+          // Fall back to string sort
+          return newSort === 'asc'
+            ? aVal.localeCompare(bVal)
+            : bVal.localeCompare(aVal);
+        });
+
+        // Re-append sorted rows
+        rows.forEach(row => tbody.appendChild(row));
+      });
+    });
+  });
+</script>

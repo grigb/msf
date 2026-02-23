@@ -1,0 +1,178 @@
+---
+title: "Meta WorldGen (Research)"
+description: "Only system that explicitly generates navmesh during world creation"
+section: "implementations"
+order: 4.8
+image: "/images/implementations/meta-worldgen-hero.jpg"
+---
+
+import SRLBadge from '../../../components/SRLBadge.astro';
+import CapabilityTable from '../../../components/CapabilityTable.astro';
+import StandardsCompliance from '../../../components/StandardsCompliance.astro';
+
+
+
+## Basic Information
+
+| Attribute | Value |
+|-----------|-------|
+| **Organization** | Meta AI Research |
+| **Type** | Research (not commercially available) |
+| **Launch Date** | Research paper 2025 |
+| **Current Version** | Research prototype |
+| **URL** | Research publication |
+| **Availability** | Research only |
+
+<SRLBadge level={3} label="SRL-3: Prototype" />
+
+---
+
+## Capability Profile
+
+| Capability | Support | Notes |
+|------------|---------|-------|
+| Text-to-World | **Full** | Scene planning + reconstruction pipeline |
+| Trimesh Output | **Full** | Engine-compatible geometry |
+| Navmesh Generation | **Full** | Automatic extraction during reconstruction |
+| Physics Collision | **Full** | Collision geometry included |
+| Multi-Room Scenes | **Full** | 50x50m worlds demonstrated |
+
+
+---
+
+## Standards Compliance
+
+| Standard | Compliance | Notes |
+|----------|------------|-------|
+| **glTF 2.0** | Implied | Trimesh output compatible |
+| **Standard Mesh** | **Full** | Game-engine-ready output |
+| **Proprietary** | Full | Research system |
+
+---
+
+## Maturity Assessment
+
+**SRL Score:** SRL-3 (Prototype)
+
+**Evidence:**
+- Research publication demonstrating full pipeline
+- Text to game-ready world with navmesh
+- Not commercially available
+- Likely path to Horizon Worlds integration
+
+---
+
+## Interoperability
+
+| Aspect | Details |
+|--------|---------|
+| **Export Formats** | Trimesh (GLB implied) |
+| **Import Formats** | Text descriptions |
+| **API Availability** | No (research only) |
+| **Known Integrations** | None public; likely Horizon Worlds future |
+
+---
+
+## Strengths
+
+1. **Only system with automatic navmesh generation** - Unique capability for game-ready output
+
+2. **4-stage pipeline produces game-ready output** - Planning, reconstruction, decomposition, refinement
+
+3. **Competitive generation latency** - ~5 minutes for 50x50m world
+
+
+---
+
+## Limitations
+
+1. **Research only** - Not commercially available
+
+2. **Hardware requirements unspecified** - Estimated 8x H100 equivalent
+
+3. **Navmesh quality not benchmarked** - Not compared against manual creation
+
+---
+
+## 4-Stage Pipeline
+
+
+### Stage 1: Scene Planning
+- Text description parsed
+- Room layout determined
+- Object placement planned
+
+### Stage 2: 3D Reconstruction
+- Geometry generated from plan
+- Multi-view synthesis
+- Initial mesh creation
+
+### Stage 3: Decomposition
+- Scene segmented into objects
+- Collision geometry extracted
+- **Navmesh generated**
+
+### Stage 4: Refinement
+- Texture detail added
+- Material properties assigned
+- Final optimization
+
+---
+
+## Navmesh Generation
+
+**WorldGen is unique** in generating navigation meshes as part of the world creation pipeline.
+
+
+| System | Navmesh | Collision | Notes |
+|--------|---------|-----------|-------|
+| **WorldGen** | **Auto** | **Auto** | Unique |
+| Marble | None | Partial | Dual-mesh |
+| Meshy | None | None | Asset only |
+| Genie 3 | None | None | Video only |
+
+---
+
+## Research Implications
+
+WorldGen demonstrates technical feasibility of:
+
+1. **Integrated physics infrastructure** - Navmesh and collision in generation pipeline
+2. **Text-to-game-ready workflow** - Minimal post-processing required
+3. **Large-scale generation** - 50x50m worlds practical
+
+
+---
+
+## Expected Trajectory
+
+| Timeline | Expected Development |
+|----------|---------------------|
+| 2025-2026 | Continued research publication |
+| 2026-2027 | Potential Horizon Worlds integration |
+| 2027+ | Possible commercial availability |
+
+---
+
+## MSF Relevance
+
+WorldGen demonstrates that **geometry-native world generation with physics infrastructure is technically feasible**.
+
+**Key monitoring priorities:**
+- Production deployment timeline
+- Navmesh quality benchmarks
+- Integration with Horizon Worlds
+- Potential open-source release
+
+**Standards implications:**
+- Navmesh can be part of generation, not just post-processing
+- Quality validation profiles should include physics infrastructure
+- AI metadata should include physics generation parameters
+
+---
+
+## Navigation
+
+- [Previous: Luma AI](/implementations/luma-ai/)
+- [Next: Blockade Labs](/implementations/blockade-labs/)
+- [Back to Implementations Overview](/implementations/)

@@ -1,0 +1,215 @@
+---
+title: "SDO Coordination Map"
+description: "Standards Development Organizations active in AI-generated virtual environments"
+section: "coordination"
+order: 7
+---
+
+import SDOCard from '../../components/SDOCard.astro';
+import CoordinationDiagram from '../../components/CoordinationDiagram.astro';
+
+
+
+## Active SDOs in This Domain
+
+These Standards Development Organizations are actively working on standards relevant to AI-generated virtual environments.
+
+| SDO | Working Group | Focus Area | Status | MSF Relationship |
+|-----|---------------|------------|--------|------------------|
+| **Khronos Group** | 3D Formats WG | glTF, Gaussian splatting | Active | Liaison |
+| **Khronos Group** | OpenXR WG | XR runtime API | Active | Member |
+| **AOUSD** | USD WG | Scene description, interchange | Active | Liaison |
+| **W3C** | Immersive Web WG | WebXR, WebGPU | Active | Observer |
+| **C2PA** | Technical WG | Content provenance | Active | **None (gap)** |
+| **OMA3** | Metaverse Standards | Blockchain interoperability | Active | Observer |
+| **OGC** | 3D Data Container | Geospatial, 3D Tiles | Active | Via Khronos |
+
+<div className="sdo-cards">
+
+<SDOCard
+  name="Khronos Group"
+  focus="3D formats, XR APIs"
+  relationship="Liaison"
+  relevance="Primary SDO for glTF extensions, Gaussian splatting"
+  url="https://khronos.org"
+/>
+
+<SDOCard
+  name="AOUSD"
+  focus="OpenUSD ecosystem"
+  relationship="Liaison"
+  relevance="Scene description, enterprise workflows"
+  url="https://openusd.org"
+/>
+
+<SDOCard
+  name="C2PA Coalition"
+  focus="Content provenance"
+  relationship="None"
+  relevance="CRITICAL GAP - no 3D format support"
+  url="https://c2pa.org"
+/>
+
+<SDOCard
+  name="W3C"
+  focus="Web standards"
+  relationship="Observer"
+  relevance="WebXR, WebGPU for web deployment"
+  url="https://w3.org"
+/>
+
+</div>
+
+---
+
+## SDO Activity Overlap
+
+Some areas have multiple SDOs working on related problems.
+
+| Area | SDOs Involved | Coordination Status | Risk |
+|------|---------------|---------------------|------|
+| 3D Interchange | Khronos (glTF), AOUSD (USD) | **Coordinated** (MaterialX bridge) | Low |
+| Neural Representations | Khronos, OGC | **Coordinated** (joint splat work) | Low |
+| AI Generation Metadata | None active | **Uncoordinated** | High (fragmentation) |
+| Provenance | C2PA | No 3D coverage | High (gap) |
+| Physics/Simulation | AOUSD (exploring) | Early stage | Medium |
+| Behavioral Semantics | Khronos (KHR_interactivity) | Draft stage | Medium |
+
+<CoordinationDiagram
+  areas={[
+    { name: "3D Interchange", sdos: ["Khronos", "AOUSD"], status: "coordinated" },
+    { name: "Neural Formats", sdos: ["Khronos", "OGC"], status: "coordinated" },
+    { name: "AI Metadata", sdos: [], status: "none" },
+    { name: "Provenance", sdos: ["C2PA"], status: "gap" },
+    { name: "Physics", sdos: ["AOUSD"], status: "early" },
+    { name: "Behaviors", sdos: ["Khronos"], status: "draft" }
+  ]}
+/>
+
+
+---
+
+## White Spaces (No SDO Activity)
+
+These areas have **no active standardization work** and represent opportunities for MSF initiative.
+
+| Area | Importance | Suggested Lead SDO | MSF Action |
+|------|------------|-------------------|------------|
+| **AI Generation Metadata** | HIGH | Khronos (glTF extension) | Propose extension |
+| **3D Content Provenance** | HIGH | C2PA + Khronos | Advocate for 3D support |
+| **World Package Format** | HIGH | Khronos or AOUSD | Convene discussion |
+| **Deterministic Generation** | MEDIUM | MSF (new work) | Define requirements |
+| **Quality Validation Profiles** | HIGH | MSF + Khronos | Define profiles |
+| **Affordance Vocabulary** | MEDIUM | Khronos | Support KHR_interactivity |
+
+
+### AI Generation Metadata
+
+**Status:** No SDO activity
+**MSF Opportunity:** Propose MSF_ai_generation_metadata as vendor extension, path to KHR
+
+### 3D Content Provenance
+
+**Status:** C2PA covers 2D only
+**MSF Opportunity:** Formal advocacy to C2PA Coalition for 3D format support
+
+### World Package Format
+
+**Status:** No unified approach
+**MSF Opportunity:** Convene multi-SDO discussion (Khronos + AOUSD)
+
+---
+
+## SDO Deep Dives
+
+### Khronos Group
+
+
+**Relevant Working Groups:**
+
+| Working Group | Focus | MSF Engagement |
+|---------------|-------|----------------|
+| 3D Formats | glTF, extensions | Active liaison |
+| OpenXR | XR runtime API | Member |
+| WebGL | Web 3D rendering | Observer |
+
+**Active Relevant Work:**
+- KHR_gaussian_splatting (draft)
+- KHR_interactivity (draft)
+- glTF extensions ecosystem
+
+**MSF Engagement Opportunity:**
+- Propose MSF_ai_generation_metadata extension
+- Support Gaussian splatting ratification
+- Contribute to interactivity vocabulary
+
+### AOUSD (Alliance for OpenUSD)
+
+
+**Focus Areas:**
+- OpenUSD core specification
+- MaterialX integration
+- Physics exploration
+
+**Active Relevant Work:**
+- Core Spec 1.0 stabilization
+- Physics extension exploration
+- Enterprise workflow support
+
+**MSF Engagement Opportunity:**
+- Advocate for AI generation schemas
+- Support physics extension for games
+- Coordinate with glTF for interchange
+
+### C2PA Coalition
+
+
+**Focus Areas:**
+- Content authenticity
+- Provenance tracking
+- Digital media trust
+
+**Current Limitation:**
+- **No 3D format support**
+- Covers images, video, audio only
+- Critical gap for AI-generated 3D
+
+**MSF Engagement Opportunity:**
+- Formal liaison establishment
+- Advocate for glTF/USD embedding
+- Propose 3D workflow requirements
+
+---
+
+## Coordination Recommendations
+
+### Immediate Actions
+
+| Action | Target SDO | MSF Role | Timeline |
+|--------|-----------|----------|----------|
+| Establish C2PA liaison | C2PA Coalition | Initiate | Q1 2026 |
+| Propose AI metadata extension | Khronos | Submit proposal | Q2 2026 |
+| Support Gaussian splat work | Khronos | Contribute use cases | Ongoing |
+
+### Near-term Actions
+
+| Action | Target SDO | MSF Role | Timeline |
+|--------|-----------|----------|----------|
+| World package discussion | Khronos + AOUSD | Convene | Q4 2026 |
+| Quality profiles | Khronos | Co-develop | Q3 2026 |
+| Physics extension input | AOUSD | Requirements | 2026-2027 |
+
+### Ongoing Coordination
+
+| Activity | SDOs | MSF Role |
+|----------|------|----------|
+| glTF ecosystem monitoring | Khronos | Liaison |
+| USD development tracking | AOUSD | Liaison |
+| WebXR evolution | W3C | Observer |
+
+---
+
+## Navigation
+
+- [Previous: Gap Analysis](/gaps/)
+- [Next: Maturity Assessment](/maturity/)

@@ -1,0 +1,137 @@
+---
+title: "Domain Definition & Scope"
+description: "Definition, boundaries, and key terminology for AI-Generated Virtual Environments"
+section: "scope"
+order: 2
+---
+
+import TermDefinition from '../../components/TermDefinition.astro';
+
+
+
+## Definition
+
+AI-Generated Virtual Environments refers to AI systems that generate complete, interactive virtual environments for consumption by humans, AI agents, and machines. This encompasses two distinct technical paradigms:
+
+1. **World Models** that understand dynamics and physics and generate interactive simulations
+2. **3D Asset/Environment Generators** that produce exportable geometry, textures, and scene data compatible with game engines
+
+The domain is characterized by:
+- Rapid technological evolution (2024-2025 saw the emergence of "Large World Models" as a distinct category)
+- Significant architectural diversity (video-based vs. geometry-based approaches)
+- Fundamental questions about what "generation" means when outputs range from real-time video streams to batch-produced mesh files
+
+### World Model Disambiguation
+
+The term "world model" itself has two related but distinct meanings:
+
+| Type | Description | Examples |
+|------|-------------|----------|
+| **Generative World Models** | Create external environments | World Labs Marble, Google Genie, NVIDIA Cosmos |
+| **Internal Predictive World Models** | Reasoning systems for AI agents | Meta V-JEPA |
+
+This report focuses on **Generative World Models**.
+
+---
+
+## In Scope
+
+The following are explicitly within the scope of this research:
+
+- AI systems that generate complete environments, levels, or worlds (batch and runtime)
+- Outputs intended for interactive consumption in engines and runtimes (Unreal, Unity, web viewers)
+- Geometry-native outputs (meshes, textures) and neural-native outputs (Gaussian splats)
+- Multi-user contexts where players and agents consume the same world state
+- Hybrid workflows combining procedural graphs with neural generation
+- Generation metadata, reproducibility, and validation profiles
+- Multiplayer determinism requirements for AI-generated content
+
+---
+
+## Out of Scope
+
+| Topic | Reason | Covered By |
+|-------|--------|------------|
+| Agent cognition and decision-making | Distinct domain with different standards needs | MSF Autonomous Agents Use Case |
+| Provenance and attribution standards | Infrastructure dependency | MSF Transparency and Provenance |
+| Cross-platform asset format standards | General interchange, not AI-specific | 3D Asset Interoperability WG |
+| NeRF representations | No portable format, not real-time viable | Academic research |
+| AR-specific concerns (spatial anchoring) | Distinct requirements | MSF AR Use Cases 18-21 |
+| Robotics-only training scenarios | Not intended for metaverse consumption | Industrial simulation standards |
+
+---
+
+## Adjacent Domains
+
+
+| Domain | Relationship | Overlap Areas |
+|--------|--------------|---------------|
+| **Robotics/Physical AI** | Shared technology, distinct purpose | World models (Cosmos), training environments |
+| **Digital Twins** | Overlapping if multi-consumer | Industrial metaverse, enterprise simulation |
+| **Gaming/Game Engines** | Core overlap | Primary deployment target |
+| **VFX/Film Production** | Adjacent market | Pre-visualization, USD workflows |
+| **Procedural Content Generation** | Evolution from | Hybrid AI+PCG workflows |
+| **3D Asset Generation** | Component/subsystem | Single-object generation within environments |
+
+---
+
+## Key Terminology
+
+<div className="terminology-grid">
+
+<TermDefinition
+  term="World Model"
+  definition="AI system that understands dynamics and generates interactive simulations"
+  aliases={["Large World Model (LWM)", "Foundation World Model"]}
+/>
+
+<TermDefinition
+  term="3D Gaussian Splatting (3DGS)"
+  definition="Explicit particle representation using millions of Gaussian distributions for real-time rendering"
+  aliases={["Gaussian Splats", "3DGS", "GS"]}
+/>
+
+<TermDefinition
+  term="Spatial Intelligence"
+  definition="Capacity for AI to understand and generate spatially consistent 3D representations"
+  aliases={["3D Intelligence", "Spatial AI"]}
+/>
+
+<TermDefinition
+  term="Physical AI"
+  definition="NVIDIA term for AI systems designed for physics-aware robotics and simulation"
+  aliases={["Embodied AI", "Robotics AI"]}
+/>
+
+<TermDefinition
+  term="Inverse Graphics"
+  definition="3D asset generation approach that reconstructs 3D from 2D images"
+  aliases={["Reconstruction", "Structure from Image"]}
+/>
+
+<TermDefinition
+  term="Next-Token Prediction"
+  definition="World model approach that predicts future video frames from current state"
+  aliases={["Video Prediction", "Frame Generation"]}
+/>
+
+<TermDefinition
+  term="Neural Assets"
+  definition="3D content stored as neural network weights rather than traditional geometry"
+  aliases={["Neural Representations", "Radiance Fields"]}
+/>
+
+<TermDefinition
+  term="Generation Recipe"
+  definition="Complete parameter set needed to reproduce AI-generated content (prompt, seed, model version)"
+  aliases={["Generation Metadata", "Reproducibility Data"]}
+/>
+
+</div>
+
+---
+
+## Navigation
+
+- [Previous: Home](/)
+- [Next: Current Landscape](/landscape/)

@@ -1,0 +1,517 @@
+---
+/**
+ * FilterPanel.astro
+ * Filter controls for data tables and grids
+ */
+
+interface FilterOption {
+  value: string;
+  label: string;
+  count?: number;
+}
+
+interface FilterGroup {
+  id: string;
+  label: string;
+  type: 'checkbox' | 'radio' | 'range' | 'search';
+  options?: FilterOption[];
+  min?: number;
+  max?: number;
+  step?: number;
+}
+
+interface Props {
+  filters: FilterGroup[];
+  targetId: string;
+  showClearAll?: boolean;
+}
+
+const { filters, targetId, showClearAll = true } = Astro.props;
+
+const filterId = `filter-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<aside class="filter-panel" data-filter-panel data-target={targetId} id={filterId}>
+  <div class="filter-panel__header">
+    <h3 class="filter-panel__title">Filters</h3>
+    {showClearAll && (
+      <button
+        type="button"
+        class="filter-panel__clear"
+        data-filter-clear-all
+      >
+        Clear all
+      </button>
+    )}
+  </div>
+
+  <div class="filter-panel__body">
+    {filters.map(filter => (
+      <div class="filter-panel__group" data-filter-group={filter.id}>
+        <h4 class="filter-panel__group-label">{filter.label}</h4>
+
+        {filter.type === 'search' && (
+          <div class="filter-panel__search">
+            <svg class="filter-panel__search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input
+              type="search"
+              class="filter-panel__search-input"
+              placeholder={`Search ${filter.label.toLowerCase()}...`}
+              data-filter-search={filter.id}
+            />
+          </div>
+        )}
+
+        {filter.type === 'range' && (
+          <div class="filter-panel__range">
+            <input
+              type="range"
+              class="filter-panel__range-input"
+              min={filter.min ?? 1}
+              max={filter.max ?? 9}
+              step={filter.step ?? 1}
+              value={filter.min ?? 1}
+              data-filter-range={filter.id}
+            />
+            <div class="filter-panel__range-labels">
+              <span>{filter.min ?? 1}</span>
+              <span class="filter-panel__range-value" data-range-value>{filter.min ?? 1}</span>
+              <span>{filter.max ?? 9}</span>
+            </div>
+          </div>
+        )}
+
+        {(filter.type === 'checkbox' || filter.type === 'radio') && filter.options && (
+          <div class="filter-panel__options">
+            {filter.options.map(option => (
+              <label class="filter-panel__option">
+                <input
+                  type={filter.type}
+                  name={filter.id}
+                  value={option.value}
+                  class="filter-panel__input"
+                  data-filter-input={filter.id}
+                />
+                <span class="filter-panel__checkbox">
+                  {filter.type === 'checkbox' ? (
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  ) : (
+                    <span class="filter-panel__radio-dot"></span>
+                  )}
+                </span>
+                <span class="filter-panel__option-label">{option.label}</span>
+                {option.count !== undefined && (
+                  <span class="filter-panel__option-count">{option.count}</span>
+                )}
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+
+  <div class="filter-panel__footer">
+    <span class="filter-panel__count" data-filter-count>
+      <strong>0</strong> results
+    </span>
+    <button
+      type="button"
+      class="filter-panel__apply"
+      data-filter-apply
+    >
+      Apply Filters
+    </button>
+  </div>
+</aside>
+
+<style>
+  .filter-panel {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .filter-panel__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-surface-alt);
+  }
+
+  .filter-panel__title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .filter-panel__clear {
+    padding: var(--space-1) var(--space-2);
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-size: var(--font-size-xs);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-fast);
+  }
+
+  .filter-panel__clear:hover {
+    background-color: var(--color-info-bg);
+  }
+
+  .filter-panel__body {
+    flex: 1;
+    padding: var(--space-4);
+    overflow-y: auto;
+  }
+
+  .filter-panel__group {
+    margin-bottom: var(--space-6);
+  }
+
+  .filter-panel__group:last-child {
+    margin-bottom: 0;
+  }
+
+  .filter-panel__group-label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-3);
+  }
+
+  /* Search input */
+  .filter-panel__search {
+    position: relative;
+  }
+
+  .filter-panel__search-icon {
+    position: absolute;
+    left: var(--space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    pointer-events: none;
+  }
+
+  .filter-panel__search-input {
+    width: 100%;
+    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-8);
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    transition: border-color var(--transition-fast);
+  }
+
+  .filter-panel__search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  /* Range input */
+  .filter-panel__range {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .filter-panel__range-input {
+    width: 100%;
+    height: 4px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .filter-panel__range-input::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+  }
+
+  .filter-panel__range-input::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+  }
+
+  .filter-panel__range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .filter-panel__range-value {
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  /* Checkbox/Radio options */
+  .filter-panel__options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .filter-panel__option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    padding: var(--space-1) 0;
+  }
+
+  .filter-panel__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .filter-panel__checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background-color: var(--color-surface);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: transparent;
+    transition: all var(--transition-fast);
+  }
+
+  .filter-panel__input[type="radio"] + .filter-panel__checkbox {
+    border-radius: 50%;
+  }
+
+  .filter-panel__radio-dot {
+    width: 8px;
+    height: 8px;
+    background-color: transparent;
+    border-radius: 50%;
+    transition: background-color var(--transition-fast);
+  }
+
+  .filter-panel__input:checked + .filter-panel__checkbox {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+  }
+
+  .filter-panel__input[type="radio"]:checked + .filter-panel__checkbox .filter-panel__radio-dot {
+    background-color: white;
+  }
+
+  .filter-panel__input:focus-visible + .filter-panel__checkbox {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .filter-panel__option-label {
+    flex: 1;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+  }
+
+  .filter-panel__option-count {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    padding: var(--space-1) var(--space-2);
+    background-color: var(--color-surface-alt);
+    border-radius: var(--radius-full);
+  }
+
+  /* Footer */
+  .filter-panel__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-surface-alt);
+  }
+
+  .filter-panel__count {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .filter-panel__count strong {
+    color: var(--color-text);
+  }
+
+  .filter-panel__apply {
+    padding: var(--space-2) var(--space-4);
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+  }
+
+  .filter-panel__apply:hover {
+    background-color: var(--color-primary-hover);
+  }
+
+  /* Mobile: Make it a collapsible sheet */
+  @media (max-width: 768px) {
+    .filter-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-height: 70vh;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      transform: translateY(100%);
+      transition: transform var(--transition-base);
+      z-index: 100;
+    }
+
+    .filter-panel[data-open] {
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-filter-panel]').forEach(panel => {
+    const targetId = panel.getAttribute('data-target');
+    const clearAllBtn = panel.querySelector('[data-filter-clear-all]');
+    const applyBtn = panel.querySelector('[data-filter-apply]');
+    const countEl = panel.querySelector('[data-filter-count]');
+
+    // Get all filter inputs
+    function getFilterValues(): Record<string, string[]> {
+      const values: Record<string, string[]> = {};
+
+      // Checkboxes and radios
+      panel.querySelectorAll('[data-filter-input]:checked').forEach(input => {
+        const key = (input as HTMLInputElement).name;
+        const value = (input as HTMLInputElement).value;
+        if (!values[key]) values[key] = [];
+        values[key].push(value);
+      });
+
+      // Search inputs
+      panel.querySelectorAll('[data-filter-search]').forEach(input => {
+        const key = (input as HTMLInputElement).getAttribute('data-filter-search') || '';
+        const value = (input as HTMLInputElement).value.trim();
+        if (value) {
+          values[key] = [value];
+        }
+      });
+
+      // Range inputs
+      panel.querySelectorAll('[data-filter-range]').forEach(input => {
+        const key = (input as HTMLInputElement).getAttribute('data-filter-range') || '';
+        values[key] = [(input as HTMLInputElement).value];
+      });
+
+      return values;
+    }
+
+    // Apply filters
+    function applyFilters() {
+      const filters = getFilterValues();
+      const target = targetId ? document.getElementById(targetId) : null;
+
+      if (target) {
+        // Dispatch custom event with filter values
+        target.dispatchEvent(new CustomEvent('filter', {
+          detail: filters,
+          bubbles: true
+        }));
+
+        // Simple filtering for data attributes
+        const items = target.querySelectorAll('[data-filterable]');
+        let visibleCount = 0;
+
+        items.forEach(item => {
+          let visible = true;
+
+          Object.entries(filters).forEach(([key, values]) => {
+            const itemValue = item.getAttribute(`data-${key}`);
+            if (itemValue && values.length > 0) {
+              // For search, check if item value contains search term
+              if (key.endsWith('-search')) {
+                visible = visible && itemValue.toLowerCase().includes(values[0].toLowerCase());
+              } else {
+                visible = visible && values.includes(itemValue);
+              }
+            }
+          });
+
+          (item as HTMLElement).hidden = !visible;
+          if (visible) visibleCount++;
+        });
+
+        // Update count
+        if (countEl) {
+          const strong = countEl.querySelector('strong');
+          if (strong) strong.textContent = String(visibleCount);
+        }
+      }
+    }
+
+    // Clear all filters
+    function clearFilters() {
+      panel.querySelectorAll('[data-filter-input]').forEach(input => {
+        (input as HTMLInputElement).checked = false;
+      });
+
+      panel.querySelectorAll('[data-filter-search]').forEach(input => {
+        (input as HTMLInputElement).value = '';
+      });
+
+      panel.querySelectorAll('[data-filter-range]').forEach(input => {
+        const min = (input as HTMLInputElement).min;
+        (input as HTMLInputElement).value = min;
+        const valueEl = (input as HTMLElement).parentElement?.querySelector('[data-range-value]');
+        if (valueEl) valueEl.textContent = min;
+      });
+
+      applyFilters();
+    }
+
+    // Event listeners
+    clearAllBtn?.addEventListener('click', clearFilters);
+    applyBtn?.addEventListener('click', applyFilters);
+
+    // Range value display
+    panel.querySelectorAll('[data-filter-range]').forEach(input => {
+      input.addEventListener('input', (e) => {
+        const value = (e.target as HTMLInputElement).value;
+        const valueEl = (input as HTMLElement).parentElement?.querySelector('[data-range-value]');
+        if (valueEl) valueEl.textContent = value;
+      });
+    });
+
+    // Auto-apply on change (optional)
+    panel.querySelectorAll('[data-filter-input], [data-filter-search]').forEach(input => {
+      input.addEventListener('change', applyFilters);
+    });
+  });
+</script>

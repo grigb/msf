@@ -1,0 +1,19 @@
+{
+  "name": "msf-ai-gen-envs-reference",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "MSF AI-Generated Virtual Environments - Interactive Reference Site (Offline-capable)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "build:offline": "astro build && node scripts/fix-paths.cjs",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^4.0.0",
+    "@astrojs/mdx": "^2.0.0"
+  },
+  "devDependencies": {
+    "pagefind": "^1.0.0"
+  }
+}

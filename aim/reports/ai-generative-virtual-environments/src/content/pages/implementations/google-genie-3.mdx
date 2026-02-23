@@ -1,0 +1,141 @@
+---
+title: "Google DeepMind Genie 3"
+description: "Real-time interactive world model from single images - video-based paradigm representative"
+section: "implementations"
+order: 4.2
+image: "/images/implementations/google-genie-3-hero.jpg"
+---
+
+import SRLBadge from '../../../components/SRLBadge.astro';
+import CapabilityTable from '../../../components/CapabilityTable.astro';
+import StandardsCompliance from '../../../components/StandardsCompliance.astro';
+
+
+
+## Basic Information
+
+| Attribute | Value |
+|-----------|-------|
+| **Organization** | Google DeepMind |
+| **Type** | Research (not commercially available) |
+| **Launch Date** | August 2025 |
+| **Current Version** | Genie 3 |
+| **URL** | [deepmind.google/discover/blog/](https://deepmind.google/discover/blog/) |
+| **Availability** | Research only |
+
+<SRLBadge level={4} label="SRL-4: Pilot" />
+
+---
+
+## Capability Profile
+
+| Capability | Support | Notes |
+|------------|---------|-------|
+| Single Image to World | **Full** | Primary input |
+| Real-time Interactivity | **Full** | &lt;100ms latency |
+| Promptable World Events | **Full** | Text commands mid-session |
+| 3D Export | **None** | Video stream only |
+| Action Space | Partial | Navigation only; no object manipulation |
+| Session Length | Partial | 3-5 minute persistence |
+
+
+---
+
+## Standards Compliance
+
+| Standard | Compliance | Notes |
+|----------|------------|-------|
+| **glTF 2.0** | None | No 3D export |
+| **OpenUSD** | None | No 3D export |
+| **Any 3D format** | None | Outputs video frames only |
+
+**Key Insight:** Genie 3 represents the video-based paradigm that **cannot be addressed by traditional 3D standards**. Its output is interactive pixel streams, not geometry.
+
+---
+
+## Maturity Assessment
+
+**SRL Score:** SRL-4 (Pilot)
+
+**Evidence:**
+- Research demonstration with published papers
+- Not commercially available
+- Designed for AI agent training (SIMA), not consumer products
+
+---
+
+## Interoperability
+
+| Aspect | Details |
+|--------|---------|
+| **Export Formats** | Interactive video stream only |
+| **Import Formats** | Single image, text prompts |
+| **API Availability** | No (research only) |
+| **Known Integrations** | DeepMind SIMA agent |
+
+---
+
+## Strengths
+
+1. **Real-time interactivity with emergent physics** - Worlds respond to user actions with plausible physics simulation
+
+2. **Infinite variation** - Memory footprint independent of world size; can generate arbitrarily large environments
+
+3. **Promptable mid-session events** - Dynamic world modification through text commands during play
+
+
+---
+
+## Limitations
+
+1. **No exportable 3D geometry** - Outputs locked to video stream; cannot be used in game engines
+
+2. **Navigation-only action space** - No picking, crafting, throwing, or object manipulation
+
+3. **Non-persistent worlds** - Worlds are reimagined each session; no save/load
+
+4. **Short memory horizon** - ~1 minute before "forgetting" off-screen elements
+
+---
+
+## Architecture Diagram
+
+
+The system uses **next-token prediction** to generate video frames:
+
+1. Input image processed by vision encoder
+2. Current state encoded as tokens
+3. Next frame predicted based on action input
+4. Frame rendered and displayed
+5. Loop continues in real-time
+
+---
+
+## MSF Relevance
+
+Genie 3 represents the **video-based paradigm that cannot be addressed by traditional 3D standards**.
+
+**Implications for MSF:**
+- Any MSF work must acknowledge this paradigm exists
+- Focus interoperability efforts on geometry-based systems
+- Monitor video-to-3D reconstruction research as potential bridge
+- Do not attempt to standardize video-based outputs directly
+
+---
+
+## Research Value
+
+While not directly standardizable, Genie 3's architecture informs understanding of:
+
+- Real-time world generation requirements
+- Agent training environment needs
+- The fundamental tradeoff between interactivity and exportability
+
+
+---
+
+## Navigation
+
+- [Previous: World Labs Marble](/implementations/world-labs-marble/)
+- [Next: NVIDIA Cosmos](/implementations/nvidia-cosmos/)
+- [Back to Implementations Overview](/implementations/)

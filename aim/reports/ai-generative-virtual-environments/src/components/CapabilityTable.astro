@@ -1,0 +1,63 @@
+---
+/**
+ * CapabilityTable.astro
+ * Table component for displaying implementation capabilities
+ */
+
+interface Props {
+  columns?: string[];
+}
+
+const { columns = ['Capability', 'Support', 'Notes'] } = Astro.props;
+---
+
+<div class="capability-table">
+  <table class="capability-table__table">
+    <thead>
+      <tr>
+        {columns.map(col => (
+          <th>{col}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      <slot />
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .capability-table {
+    width: 100%;
+    overflow-x: auto;
+    margin: var(--space-4) 0;
+  }
+
+  .capability-table__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+  }
+
+  .capability-table__table th,
+  .capability-table__table :global(td) {
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .capability-table__table th {
+    font-weight: var(--font-weight-semibold);
+    background-color: var(--color-surface-alt);
+    white-space: nowrap;
+  }
+
+  .capability-table__table :global(tr:hover td) {
+    background-color: var(--color-primary-light);
+  }
+
+  /* Support level styling */
+  .capability-table__table :global(td strong) {
+    color: var(--color-success);
+  }
+</style>

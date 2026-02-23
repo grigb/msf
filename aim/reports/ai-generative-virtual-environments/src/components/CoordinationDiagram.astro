@@ -1,0 +1,324 @@
+---
+/**
+ * CoordinationDiagram.astro
+ * SDO coordination relationship visualization using pure CSS
+ */
+
+interface AreaItem {
+  name: string;
+  sdos: string[];
+  status: 'coordinated' | 'early' | 'draft' | 'gap' | 'none';
+}
+
+interface Props {
+  areas?: AreaItem[];
+  data?: any;
+}
+
+const { areas = [], data } = Astro.props;
+
+const statusConfig: Record<string, { color: string; bg: string; label: string; icon: string }> = {
+  coordinated: { color: '#10B981', bg: '#D1FAE5', label: 'Coordinated', icon: 'check' },
+  early: { color: '#3B82F6', bg: '#DBEAFE', label: 'Early Stage', icon: 'clock' },
+  draft: { color: '#F59E0B', bg: '#FEF3C7', label: 'Draft', icon: 'edit' },
+  gap: { color: '#DC2626', bg: '#FEE2E2', label: 'Gap', icon: 'alert' },
+  none: { color: '#991B1B', bg: '#FEE2E2', label: 'No Activity', icon: 'x' },
+};
+
+// Collect unique SDOs
+const allSDOs = [...new Set(areas.flatMap(a => a.sdos))].sort();
+---
+
+<div class="coord-diagram">
+  <h3 class="coord-diagram__title">SDO Coordination Map</h3>
+
+  {areas.length > 0 ? (
+    <div class="coord-diagram__body">
+      {/* Legend */}
+      <div class="coord-diagram__legend">
+        {Object.entries(statusConfig).map(([key, config]) => (
+          <div class="coord-diagram__legend-item">
+            <span
+              class="coord-diagram__legend-dot"
+              style={`background-color: ${config.color}`}
+            ></span>
+            <span class="coord-diagram__legend-label">{config.label}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Areas grid */}
+      <div class="coord-diagram__areas">
+        {areas.map(area => {
+          const config = statusConfig[area.status] || statusConfig.none;
+          return (
+            <div
+              class="coord-diagram__area"
+              style={`--area-color: ${config.color}; --area-bg: ${config.bg}`}
+            >
+              <div class="coord-diagram__area-header">
+                <span class="coord-diagram__area-name">{area.name}</span>
+                <span
+                  class="coord-diagram__status-badge"
+                  style={`color: ${config.color}; background-color: ${config.bg}`}
+                >
+                  {config.label}
+                </span>
+              </div>
+
+              <div class="coord-diagram__sdos">
+                {area.sdos.length > 0 ? (
+                  area.sdos.map(sdo => (
+                    <span class="coord-diagram__sdo-tag">{sdo}</span>
+                  ))
+                ) : (
+                  <span class="coord-diagram__no-sdo">No active SDO</span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* SDO summary */}
+      <div class="coord-diagram__sdo-summary">
+        <span class="coord-diagram__summary-title">Active SDOs:</span>
+        <div class="coord-diagram__sdo-list">
+          {allSDOs.map(sdo => {
+            const count = areas.filter(a => a.sdos.includes(sdo)).length;
+            return (
+              <span class="coord-diagram__sdo-count">
+                {sdo} <em>({count} area{count !== 1 ? 's' : ''})</em>
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Risk summary */}
+      <div class="coord-diagram__risk-summary">
+        <span class="coord-diagram__risk-critical">
+          {areas.filter(a => a.status === 'gap' || a.status === 'none').length} areas at risk
+        </span>
+        <span class="coord-diagram__risk-ok">
+          {areas.filter(a => a.status === 'coordinated').length} areas coordinated
+        </span>
+      </div>
+    </div>
+  ) : (
+    <div class="coord-diagram__placeholder">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="2"/>
+        <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+        <circle cx="36" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+        <circle cx="12" cy="36" r="4" stroke="currentColor" stroke-width="2"/>
+        <circle cx="36" cy="36" r="4" stroke="currentColor" stroke-width="2"/>
+        <line x1="14" y1="14" x2="20" y2="20" stroke="currentColor" stroke-width="2"/>
+        <line x1="34" y1="14" x2="28" y2="20" stroke="currentColor" stroke-width="2"/>
+        <line x1="14" y1="34" x2="20" y2="28" stroke="currentColor" stroke-width="2"/>
+        <line x1="34" y1="34" x2="28" y2="28" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      <p class="coord-diagram__text">Coordination Diagram</p>
+      <span class="coord-diagram__hint">SDO relationship visualization placeholder</span>
+    </div>
+  )}
+  <slot />
+</div>
+
+<style>
+  .coord-diagram {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    margin: var(--space-4) 0;
+  }
+
+  .coord-diagram__title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 var(--space-4);
+  }
+
+  .coord-diagram__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .coord-diagram__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .coord-diagram__legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .coord-diagram__legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: var(--radius-full);
+  }
+
+  .coord-diagram__legend-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .coord-diagram__areas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .coord-diagram__area {
+    padding: var(--space-4);
+    background-color: var(--area-bg);
+    border: 2px solid var(--area-color);
+    border-radius: var(--radius-md);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .coord-diagram__area:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .coord-diagram__area-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .coord-diagram__area-name {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .coord-diagram__status-badge {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    padding: 2px var(--space-2);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .coord-diagram__sdos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .coord-diagram__sdo-tag {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    padding: 2px var(--space-2);
+    background-color: white;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+  }
+
+  .coord-diagram__no-sdo {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .coord-diagram__sdo-summary {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .coord-diagram__summary-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+    display: block;
+  }
+
+  .coord-diagram__sdo-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .coord-diagram__sdo-count {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+  }
+
+  .coord-diagram__sdo-count em {
+    color: var(--color-text-muted);
+    font-style: normal;
+  }
+
+  .coord-diagram__risk-summary {
+    display: flex;
+    gap: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .coord-diagram__risk-critical {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: #DC2626;
+    padding-left: var(--space-3);
+    border-left: 3px solid #DC2626;
+  }
+
+  .coord-diagram__risk-ok {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: #10B981;
+    padding-left: var(--space-3);
+    border-left: 3px solid #10B981;
+  }
+
+  .coord-diagram__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--color-text-muted);
+    gap: var(--space-2);
+    padding: var(--space-6);
+    background-color: var(--color-surface-alt);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .coord-diagram__text {
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+  }
+
+  .coord-diagram__hint {
+    font-size: var(--font-size-sm);
+    opacity: 0.7;
+  }
+
+  @media (max-width: 640px) {
+    .coord-diagram__areas {
+      grid-template-columns: 1fr;
+    }
+
+    .coord-diagram__risk-summary {
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+  }
+</style>

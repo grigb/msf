@@ -1,0 +1,78 @@
+---
+/**
+ * SDOCard.astro
+ * Card component for displaying Standards Development Organization information
+ */
+
+interface Props {
+  name: string;
+  description?: string;
+  relevance?: string;
+  url?: string;
+}
+
+const { name, description, relevance, url } = Astro.props;
+---
+
+<div class="sdo-card">
+  <h3 class="sdo-card__name">{name}</h3>
+  {description && <p class="sdo-card__description">{description}</p>}
+  {relevance && (
+    <div class="sdo-card__relevance">
+      <span class="sdo-card__label">Relevance:</span>
+      <span>{relevance}</span>
+    </div>
+  )}
+  {url && (
+    <a href={url} target="_blank" rel="noopener noreferrer" class="sdo-card__link">
+      Visit Website
+    </a>
+  )}
+  <slot />
+</div>
+
+<style>
+  .sdo-card {
+    padding: var(--space-5);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-4);
+    transition: box-shadow var(--transition-fast);
+  }
+
+  .sdo-card:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .sdo-card__name {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-2);
+    color: var(--color-primary);
+  }
+
+  .sdo-card__description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .sdo-card__relevance {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-3);
+  }
+
+  .sdo-card__label {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
+    margin-right: var(--space-1);
+  }
+
+  .sdo-card__link {
+    display: inline-block;
+    font-size: var(--font-size-sm);
+    color: var(--color-primary);
+  }
+</style>

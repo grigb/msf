@@ -1,0 +1,119 @@
+---
+title: "World Labs Marble"
+description: "First commercial world model with exportable geometry - deep dive analysis"
+section: "implementations"
+order: 4.1
+image: "/images/implementations/world-labs-marble-hero.png"
+---
+
+import SRLBadge from '../../../components/SRLBadge.astro';
+import CapabilityTable from '../../../components/CapabilityTable.astro';
+import StandardsCompliance from '../../../components/StandardsCompliance.astro';
+
+
+
+## Basic Information
+
+| Attribute | Value |
+|-----------|-------|
+| **Organization** | World Labs (Fei-Fei Li) |
+| **Type** | Commercial (SaaS) |
+| **Launch Date** | Beta 2024, Production 2025 |
+| **Current Version** | Marble 2.x |
+| **URL** | [worldlabs.ai](https://worldlabs.ai) |
+| **Pricing** | $35-95/month |
+
+<SRLBadge level={5} label="SRL-5: Early Adoption" />
+
+---
+
+## Capability Profile
+
+| Capability | Support | Notes |
+|------------|---------|-------|
+| Text-to-World | **Full** | Primary input modality |
+| Image-to-World | **Full** | Reference image drives generation |
+| 3D Export (Mesh) | **Full** | GLB, PLY export |
+| 3D Export (Gaussian Splat) | **Full** | Native output format |
+| Spatial Editing (Chisel) | **Full** | Block out before style generation |
+| Physics Collision | Partial | Dual-mesh for collider + visual; no navmesh |
+| Real-time Generation | Partial | Simple prompts in seconds; complex in minutes |
+
+
+---
+
+## Standards Compliance
+
+| Standard | Compliance | Notes |
+|----------|------------|-------|
+| **glTF 2.0** | Partial | GLB export available |
+| **OpenUSD** | None | Proprietary format primary |
+| **KHR_gaussian_splatting** | None | Pre-dates draft; proprietary splat format |
+
+---
+
+## Maturity Assessment
+
+**SRL Score:** SRL-5 (Early Adoption)
+
+**Evidence:**
+- $230M+ funding achieved unicorn status
+- Production SaaS with paying customers across VFX, games, and enterprise
+- First commercial "Large World Model" product
+
+---
+
+## Interoperability
+
+| Aspect | Details |
+|--------|---------|
+| **Export Formats** | GLB, PLY (Gaussian splats), native Marble format, video |
+| **Import Formats** | Text, images, video |
+| **API Availability** | Yes (commercial tiers) |
+| **Known Integrations** | Rosebud AI (gameplay), VFX studios (undisclosed) |
+
+
+---
+
+## Strengths
+
+1. **First commercial world model with exportable geometry** - Proves the feasibility of combining world model approaches with practical asset pipelines
+
+2. **Spatial editing via Chisel** - Provides designer control through block-out editing before AI style generation
+
+3. **Multi-platform output** - Outputs compatible with VR headsets (Vision Pro, Quest 3)
+
+
+---
+
+## Limitations
+
+1. **No native navmesh generation** - Must be generated in-engine post-export
+
+2. **Quality loss in conversion** - ~15% visual quality loss when converting splats to mesh
+
+3. **Commercial licensing required** - $35-95/month for production use
+
+---
+
+## Output Gallery
+
+
+---
+
+## MSF Relevance
+
+World Labs Marble is the **first production system demonstrating that world models can produce engine-compatible output**. This proves the feasibility of standards for:
+
+- AI generation metadata
+- Quality validation profiles
+- Neural-to-mesh conversion specifications
+
+Marble represents the target use case for MSF_ai_generation_metadata extension work.
+
+---
+
+## Navigation
+
+- [Back to Implementations Overview](/implementations/)
+- [Next: Google Genie 3](/implementations/google-genie-3/)

@@ -1,0 +1,214 @@
+---
+/**
+ * ReadinessChart.astro
+ * Technology readiness bar chart using pure CSS
+ */
+
+interface ReadinessItem {
+  name: string;
+  level: number;
+  description: string;
+}
+
+interface Props {
+  data?: ReadinessItem[];
+}
+
+const { data = [] } = Astro.props;
+
+// SRL color mapping
+function getSRLColor(level: number): { bar: string; bg: string } {
+  if (level <= 2) return { bar: '#DC2626', bg: '#FEE2E2' };
+  if (level <= 4) return { bar: '#F59E0B', bg: '#FEF3C7' };
+  if (level <= 6) return { bar: '#10B981', bg: '#D1FAE5' };
+  if (level <= 8) return { bar: '#3B82F6', bg: '#DBEAFE' };
+  return { bar: '#0D9488', bg: '#CCFBF1' };
+}
+
+const maxLevel = 9;
+---
+
+<div class="readiness-chart">
+  <h3 class="readiness-chart__title">Standards Readiness Levels by Domain</h3>
+
+  {data.length > 0 ? (
+    <div class="readiness-chart__body">
+      {data.map(item => {
+        const colors = getSRLColor(item.level);
+        const pct = (item.level / maxLevel) * 100;
+        return (
+          <div class="readiness-chart__row">
+            <div class="readiness-chart__label">
+              <span class="readiness-chart__name">{item.name}</span>
+              <span class="readiness-chart__desc">{item.description}</span>
+            </div>
+            <div class="readiness-chart__bar-area">
+              <div class="readiness-chart__bar-track">
+                <div
+                  class="readiness-chart__bar-fill"
+                  style={`width: ${pct}%; background-color: ${colors.bar}`}
+                >
+                </div>
+              </div>
+              <span
+                class="readiness-chart__level-badge"
+                style={`color: ${colors.bar}; background-color: ${colors.bg}`}
+              >
+                SRL-{item.level}
+              </span>
+            </div>
+          </div>
+        );
+      })}
+
+      <div class="readiness-chart__scale">
+        {Array.from({length: maxLevel}, (_, i) => i + 1).map(n => (
+          <span class="readiness-chart__scale-mark">{n}</span>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div class="readiness-chart__placeholder">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <rect x="4" y="24" width="8" height="20" rx="2" fill="currentColor" opacity="0.3"/>
+        <rect x="14" y="16" width="8" height="28" rx="2" fill="currentColor" opacity="0.5"/>
+        <rect x="24" y="8" width="8" height="36" rx="2" fill="currentColor" opacity="0.7"/>
+        <rect x="34" y="12" width="8" height="32" rx="2" fill="currentColor" opacity="0.9"/>
+      </svg>
+      <p class="readiness-chart__text">Readiness Chart</p>
+      <span class="readiness-chart__hint">Visualization will be added with chart data</span>
+    </div>
+  )}
+  <slot />
+</div>
+
+<style>
+  .readiness-chart {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    margin: var(--space-4) 0;
+  }
+
+  .readiness-chart__title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 var(--space-6);
+  }
+
+  .readiness-chart__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .readiness-chart__row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .readiness-chart__label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .readiness-chart__name {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .readiness-chart__desc {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .readiness-chart__bar-area {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .readiness-chart__bar-track {
+    flex: 1;
+    height: 24px;
+    background-color: var(--color-surface-alt);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border-light);
+  }
+
+  .readiness-chart__bar-fill {
+    height: 100%;
+    border-radius: var(--radius-md);
+    transition: width 0.6s ease;
+  }
+
+  .readiness-chart__level-badge {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    font-family: var(--font-family-mono);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    min-width: 52px;
+    text-align: center;
+  }
+
+  .readiness-chart__scale {
+    display: flex;
+    padding-left: 200px;
+    padding-right: 68px;
+    margin-top: var(--space-2);
+    justify-content: space-between;
+    margin-left: var(--space-4);
+  }
+
+  .readiness-chart__scale-mark {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-family: var(--font-family-mono);
+  }
+
+  .readiness-chart__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--color-text-muted);
+    gap: var(--space-2);
+    padding: var(--space-6);
+    background-color: var(--color-surface-alt);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .readiness-chart__text {
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+  }
+
+  .readiness-chart__hint {
+    font-size: var(--font-size-sm);
+    opacity: 0.7;
+  }
+
+  @media (max-width: 640px) {
+    .readiness-chart__row {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+
+    .readiness-chart__scale {
+      padding-left: 0;
+      padding-right: 68px;
+      margin-left: 0;
+    }
+  }
+</style>

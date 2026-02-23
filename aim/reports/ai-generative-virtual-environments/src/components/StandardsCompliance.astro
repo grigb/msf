@@ -1,0 +1,63 @@
+---
+/**
+ * StandardsCompliance.astro
+ * Table component for displaying standards compliance information
+ */
+
+interface Props {
+  columns?: string[];
+}
+
+const { columns = ['Standard', 'Compliance', 'Notes'] } = Astro.props;
+---
+
+<div class="standards-compliance">
+  <table class="standards-compliance__table">
+    <thead>
+      <tr>
+        {columns.map(col => (
+          <th>{col}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      <slot />
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .standards-compliance {
+    width: 100%;
+    overflow-x: auto;
+    margin: var(--space-4) 0;
+  }
+
+  .standards-compliance__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+  }
+
+  .standards-compliance__table th,
+  .standards-compliance__table :global(td) {
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .standards-compliance__table th {
+    font-weight: var(--font-weight-semibold);
+    background-color: var(--color-surface-alt);
+    white-space: nowrap;
+  }
+
+  .standards-compliance__table :global(tr:hover td) {
+    background-color: var(--color-primary-light);
+  }
+
+  /* Compliance level colors */
+  .standards-compliance__table :global(td strong) {
+    color: var(--color-success);
+  }
+</style>

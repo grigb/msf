@@ -1,0 +1,435 @@
+---
+/**
+ * SRLChart.astro
+ * SRL (Standards Readiness Level) levels bar chart
+ */
+
+interface SRLItem {
+  id: string;
+  name: string;
+  level: number; // 1-9
+  description?: string;
+  href?: string;
+}
+
+interface Props {
+  items: SRLItem[];
+  title?: string;
+  showScale?: boolean;
+  orientation?: 'horizontal' | 'vertical';
+}
+
+const {
+  items,
+  title = 'Standards Readiness Levels',
+  showScale = true,
+  orientation = 'horizontal'
+} = Astro.props;
+
+// Sort items by level (descending)
+const sortedItems = [...items].sort((a, b) => b.level - a.level);
+
+// SRL level definitions
+const srlDefinitions: Record<number, { label: string; color: string; bg: string }> = {
+  1: { label: 'Concept', color: '#DC2626', bg: '#FEE2E2' },
+  2: { label: 'Research', color: '#DC2626', bg: '#FEE2E2' },
+  3: { label: 'Prototype', color: '#F59E0B', bg: '#FEF3C7' },
+  4: { label: 'Pilot', color: '#F59E0B', bg: '#FEF3C7' },
+  5: { label: 'Early', color: '#10B981', bg: '#D1FAE5' },
+  6: { label: 'Growth', color: '#10B981', bg: '#D1FAE5' },
+  7: { label: 'Mainstream', color: '#3B82F6', bg: '#DBEAFE' },
+  8: { label: 'Mature', color: '#3B82F6', bg: '#DBEAFE' },
+  9: { label: 'Universal', color: '#0D9488', bg: '#CCFBF1' }
+};
+
+// Calculate distribution
+const distribution = sortedItems.reduce((acc, item) => {
+  acc[item.level] = (acc[item.level] || 0) + 1;
+  return acc;
+}, {} as Record<number, number>);
+
+const maxCount = Math.max(...Object.values(distribution), 1);
+---
+
+<div class="srl-chart" data-orientation={orientation}>
+  {title && <h3 class="srl-chart__title">{title}</h3>}
+
+  {showScale && (
+    <div class="srl-chart__scale">
+      <div class="srl-chart__scale-section" data-level="concept">
+        <span class="srl-chart__scale-levels">SRL 1-2</span>
+        <span class="srl-chart__scale-label">Concept/Research</span>
+      </div>
+      <div class="srl-chart__scale-section" data-level="prototype">
+        <span class="srl-chart__scale-levels">SRL 3-4</span>
+        <span class="srl-chart__scale-label">Prototype/Pilot</span>
+      </div>
+      <div class="srl-chart__scale-section" data-level="early">
+        <span class="srl-chart__scale-levels">SRL 5-6</span>
+        <span class="srl-chart__scale-label">Early/Growth</span>
+      </div>
+      <div class="srl-chart__scale-section" data-level="mainstream">
+        <span class="srl-chart__scale-levels">SRL 7-8</span>
+        <span class="srl-chart__scale-label">Mainstream/Mature</span>
+      </div>
+      <div class="srl-chart__scale-section" data-level="universal">
+        <span class="srl-chart__scale-levels">SRL 9</span>
+        <span class="srl-chart__scale-label">Universal</span>
+      </div>
+    </div>
+  )}
+
+  <!-- Distribution chart -->
+  <div class="srl-chart__distribution">
+    <h4 class="srl-chart__subtitle">Distribution by Level</h4>
+    <div class="srl-chart__histogram">
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(level => {
+        const count = distribution[level] || 0;
+        const height = (count / maxCount) * 100;
+        const def = srlDefinitions[level];
+
+        return (
+          <div class="srl-chart__histogram-bar-container" title={`SRL-${level}: ${count} items`}>
+            <div
+              class="srl-chart__histogram-bar"
+              style={`--bar-height: ${height}%; --bar-color: ${def.color}`}
+            >
+              <span class="srl-chart__histogram-count">{count || ''}</span>
+            </div>
+            <span class="srl-chart__histogram-level">{level}</span>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
+  <!-- Individual items -->
+  <div class="srl-chart__items">
+    <h4 class="srl-chart__subtitle">Items by Readiness Level</h4>
+    <div class="srl-chart__items-list">
+      {sortedItems.map(item => {
+        const def = srlDefinitions[item.level];
+
+        return (
+          <div class="srl-chart__item" data-level={item.level}>
+            <div class="srl-chart__item-info">
+              {item.href ? (
+                <a href={item.href} class="srl-chart__item-name">{item.name}</a>
+              ) : (
+                <span class="srl-chart__item-name">{item.name}</span>
+              )}
+              {item.description && (
+                <span class="srl-chart__item-desc">{item.description}</span>
+              )}
+            </div>
+
+            <div class="srl-chart__item-bar-container">
+              <div
+                class="srl-chart__item-bar"
+                style={`--level-width: ${(item.level / 9) * 100}%; --level-color: ${def.color}`}
+              >
+                <span class="srl-chart__item-level-text">SRL-{item.level}</span>
+              </div>
+            </div>
+
+            <span
+              class="srl-chart__item-badge"
+              style={`--badge-color: ${def.color}; --badge-bg: ${def.bg}`}
+            >
+              {def.label}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
+  <!-- Summary stats -->
+  <div class="srl-chart__stats">
+    <div class="srl-chart__stat">
+      <span class="srl-chart__stat-value">
+        {(sortedItems.reduce((sum, item) => sum + item.level, 0) / sortedItems.length).toFixed(1)}
+      </span>
+      <span class="srl-chart__stat-label">Average SRL</span>
+    </div>
+    <div class="srl-chart__stat">
+      <span class="srl-chart__stat-value">{Math.max(...sortedItems.map(i => i.level))}</span>
+      <span class="srl-chart__stat-label">Highest</span>
+    </div>
+    <div class="srl-chart__stat">
+      <span class="srl-chart__stat-value">{Math.min(...sortedItems.map(i => i.level))}</span>
+      <span class="srl-chart__stat-label">Lowest</span>
+    </div>
+    <div class="srl-chart__stat">
+      <span class="srl-chart__stat-value">{sortedItems.length}</span>
+      <span class="srl-chart__stat-label">Total Items</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .srl-chart {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+  }
+
+  .srl-chart__title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 var(--space-4);
+  }
+
+  .srl-chart__subtitle {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-3);
+  }
+
+  /* Scale legend */
+  .srl-chart__scale {
+    display: flex;
+    gap: var(--space-1);
+    margin-bottom: var(--space-6);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .srl-chart__scale-section {
+    flex: 1;
+    padding: var(--space-3);
+    text-align: center;
+  }
+
+  .srl-chart__scale-section[data-level="concept"] {
+    background-color: #FEE2E2;
+  }
+
+  .srl-chart__scale-section[data-level="prototype"] {
+    background-color: #FEF3C7;
+  }
+
+  .srl-chart__scale-section[data-level="early"] {
+    background-color: #D1FAE5;
+  }
+
+  .srl-chart__scale-section[data-level="mainstream"] {
+    background-color: #DBEAFE;
+  }
+
+  .srl-chart__scale-section[data-level="universal"] {
+    background-color: #CCFBF1;
+  }
+
+  .srl-chart__scale-levels {
+    display: block;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .srl-chart__scale-label {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--space-1);
+  }
+
+  /* Histogram */
+  .srl-chart__distribution {
+    margin-bottom: var(--space-8);
+  }
+
+  .srl-chart__histogram {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-2);
+    height: 120px;
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .srl-chart__histogram-bar-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+
+  .srl-chart__histogram-bar {
+    width: 100%;
+    max-width: 40px;
+    height: var(--bar-height);
+    min-height: 4px;
+    background-color: var(--bar-color);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: auto;
+    transition: height var(--transition-slow);
+  }
+
+  .srl-chart__histogram-count {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: white;
+    padding: var(--space-1);
+  }
+
+  .srl-chart__histogram-level {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--space-2);
+  }
+
+  /* Items list */
+  .srl-chart__items-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .srl-chart__item {
+    display: grid;
+    grid-template-columns: 200px 1fr auto;
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-3);
+    background-color: var(--color-surface-alt);
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-fast);
+  }
+
+  .srl-chart__item:hover {
+    background-color: var(--color-border);
+  }
+
+  .srl-chart__item-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  .srl-chart__item-name {
+    font-weight: 500;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  a.srl-chart__item-name:hover {
+    color: var(--color-primary);
+  }
+
+  .srl-chart__item-desc {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .srl-chart__item-bar-container {
+    height: 24px;
+    background-color: var(--color-border);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+
+  .srl-chart__item-bar {
+    height: 100%;
+    width: var(--level-width);
+    background-color: var(--level-color);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: var(--space-2);
+    transition: width var(--transition-slow);
+  }
+
+  .srl-chart__item-level-text {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+  }
+
+  .srl-chart__item-badge {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    padding: var(--space-1) var(--space-2);
+    background-color: var(--badge-bg);
+    color: var(--badge-color);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  /* Stats */
+  .srl-chart__stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .srl-chart__stat {
+    text-align: center;
+  }
+
+  .srl-chart__stat-value {
+    display: block;
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1;
+  }
+
+  .srl-chart__stat-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--space-1);
+  }
+
+  @media (max-width: 768px) {
+    .srl-chart__scale {
+      flex-wrap: wrap;
+    }
+
+    .srl-chart__scale-section {
+      flex: 1 1 calc(50% - var(--space-1));
+    }
+
+    .srl-chart__item {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+
+    .srl-chart__item-bar-container {
+      order: 2;
+    }
+
+    .srl-chart__item-badge {
+      order: 1;
+      justify-self: start;
+    }
+
+    .srl-chart__stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

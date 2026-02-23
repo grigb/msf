@@ -1,0 +1,101 @@
+---
+/**
+ * TermDefinition.astro
+ * Card component for displaying terminology definitions with aliases
+ * Used in the scope and glossary sections
+ */
+
+interface Props {
+  term: string;
+  definition: string;
+  aliases?: string[];
+}
+
+const { term, definition, aliases = [] } = Astro.props;
+---
+
+<div class="term-definition">
+  <dt class="term-definition__term">{term}</dt>
+  <dd class="term-definition__definition">
+    <p class="term-definition__text">{definition}</p>
+    {aliases.length > 0 && (
+      <div class="term-definition__aliases">
+        <span class="term-definition__aliases-label">Also known as:</span>
+        <ul class="term-definition__aliases-list">
+          {aliases.map(alias => (
+            <li class="term-definition__alias">{alias}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </dd>
+</div>
+
+<style>
+  .term-definition {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    transition: box-shadow var(--transition-fast);
+  }
+
+  .term-definition:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .term-definition__term {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    margin: 0;
+  }
+
+  .term-definition__definition {
+    margin: 0;
+  }
+
+  .term-definition__text {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-2);
+  }
+
+  .term-definition__aliases {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .term-definition__aliases-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .term-definition__aliases-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .term-definition__alias {
+    font-size: var(--font-size-xs);
+    padding: 2px var(--space-2);
+    background-color: var(--color-surface-alt);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    font-family: var(--font-family-mono);
+  }
+</style>

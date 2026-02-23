@@ -1,0 +1,255 @@
+---
+/**
+ * Footer.astro
+ * Minimal footer with version info and links - light theme
+ */
+
+interface FooterLink {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+interface Props {
+  version?: string;
+  lastUpdated?: string;
+  links?: FooterLink[];
+}
+
+const {
+  version = '1.0.0',
+  lastUpdated,
+  links = []
+} = Astro.props;
+
+const defaultLinks: FooterLink[] = [
+  { label: 'Metaverse Standards Forum', href: 'https://metaverse-standards.org', external: true },
+  { label: 'Appendices', href: '/appendices/' },
+  { label: 'Methodology', href: '/appendices/methodology/' },
+  { label: 'Sources', href: '/appendices/sources/' },
+];
+
+const footerLinks = links.length > 0 ? links : defaultLinks;
+
+const formattedDate = lastUpdated
+  ? new Date(lastUpdated).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  : null;
+---
+
+<footer class="footer">
+  <div class="footer__container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <span class="footer__mark"></span>
+        <span class="footer__title">AI-Generated Virtual Environments Reference</span>
+      </div>
+
+      <nav class="footer__nav" aria-label="Footer navigation">
+        <ul class="footer__links">
+          {footerLinks.map(link => (
+            <li>
+              <a
+                href={link.href}
+                class="footer__link"
+                {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
+                {link.label}
+                {link.external && (
+                  <svg class="footer__external-icon" width="10" height="10" viewBox="0 0 12 12" fill="none">
+                    <path d="M10.5 1.5L1.5 10.5M10.5 1.5H4.5M10.5 1.5V7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer__meta">
+      <div class="footer__info">
+        <span class="footer__version">v{version}</span>
+        {formattedDate && (
+          <>
+            <span class="footer__sep"></span>
+            <span>Updated {formattedDate}</span>
+          </>
+        )}
+      </div>
+
+      <div class="footer__credits">
+        AI x Metaverse Working Group
+      </div>
+    </div>
+
+    <div class="footer__legal">
+      <p>
+        Companion to the AI x Metaverse Working Group report.
+        For official standards information, visit the <a href="https://metaverse-standards.org" target="_blank" rel="noopener noreferrer">Metaverse Standards Forum</a>.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: auto;
+    background-color: var(--color-surface-alt);
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-10) var(--space-4);
+  }
+
+  .footer__container {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .footer__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-8);
+    flex-wrap: wrap;
+  }
+
+  .footer__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .footer__mark {
+    width: 6px;
+    height: 6px;
+    background: var(--color-primary);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .footer__title {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .footer__links {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+  }
+
+  .footer__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    transition: color var(--transition-fast);
+    border: none;
+  }
+
+  .footer__link:hover {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .footer__external-icon {
+    opacity: 0.4;
+  }
+
+  .footer__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-light);
+  }
+
+  .footer__info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .footer__version {
+    font-family: var(--font-family-mono);
+    padding: 1px var(--space-2);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 10px;
+  }
+
+  .footer__sep {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--color-border-hover);
+    display: inline-block;
+  }
+
+  .footer__credits {
+    color: var(--color-text-light);
+  }
+
+  .footer__credits a {
+    color: var(--color-text-muted);
+    border: none;
+  }
+
+  .footer__credits a:hover {
+    color: var(--color-primary);
+  }
+
+  .footer__legal {
+    font-size: 11px;
+    color: var(--color-text-light);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    line-height: 1.6;
+  }
+
+  .footer__legal p {
+    margin: 0;
+  }
+
+  .footer__legal a {
+    color: var(--color-text-muted);
+    border: none;
+  }
+
+  .footer__legal a:hover {
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 768px) {
+    .footer__top {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .footer__links {
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .footer__meta {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

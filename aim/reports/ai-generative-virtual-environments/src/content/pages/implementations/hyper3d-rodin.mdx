@@ -1,0 +1,167 @@
+---
+title: "Hyper3D Rodin"
+description: "Focus on clean topology and game-ready output quality"
+section: "implementations"
+order: 4.10
+image: "/images/implementations/hyper3d-rodin-hero.png"
+---
+
+import SRLBadge from '../../../components/SRLBadge.astro';
+import CapabilityTable from '../../../components/CapabilityTable.astro';
+import StandardsCompliance from '../../../components/StandardsCompliance.astro';
+
+
+
+## Basic Information
+
+| Attribute | Value |
+|-----------|-------|
+| **Organization** | Hyper3D |
+| **Type** | Commercial SaaS |
+| **Launch Date** | 2024 |
+| **Current Version** | Rodin |
+| **URL** | [hyper3d.ai](https://hyper3d.ai) |
+| **Pricing** | Commercial tiers |
+
+<SRLBadge level={5} label="SRL-5: Early Adoption" />
+
+---
+
+## Capability Profile
+
+| Capability | Support | Notes |
+|------------|---------|-------|
+| Text-to-3D | **Full** | Game-ready output |
+| Image-to-3D | **Full** | Multi-view reconstruction |
+| PBR Materials | **Full** | Production-quality textures |
+| Clean Topology | **Full** | Optimized mesh structure |
+| Rigging Support | Partial | Basic support |
+
+
+---
+
+## Standards Compliance
+
+| Standard | Compliance | Notes |
+|----------|------------|-------|
+| **glTF 2.0** | **Full** | Primary export |
+| **FBX** | **Full** | Production pipeline |
+| **OBJ** | **Full** | Legacy support |
+
+---
+
+## Maturity Assessment
+
+**SRL Score:** SRL-5 (Early Adoption)
+
+**Evidence:**
+- Production deployments in game studios
+- Emphasis on game-ready output quality distinguishes from research tools
+- Focus on solving production pipeline needs
+
+---
+
+## Interoperability
+
+| Aspect | Details |
+|--------|---------|
+| **Export Formats** | glTF/GLB, FBX, OBJ |
+| **Import Formats** | Text, images |
+| **API Availability** | Yes (commercial tiers) |
+| **Known Integrations** | Unity, Unreal, Blender |
+
+---
+
+## Strengths
+
+1. **Focus on clean topology** - Addresses production quality concerns that other tools ignore
+
+2. **PBR materials match professional pipeline** - Industry-standard texture outputs
+
+3. **Game-ready output reduces cleanup time** - Less post-processing vs. competitors
+
+
+---
+
+## Limitations
+
+1. **Asset-level generation only** - No environment/scene generation
+
+2. **Less widespread adoption** - Smaller user base than Meshy
+
+3. **Pricing not as accessible** - Targets professional users over indie developers
+
+---
+
+## Clean Topology Focus
+
+
+Rodin differentiates on **topology quality**:
+
+| Aspect | Rodin | Typical AI Tool |
+|--------|-------|-----------------|
+| Edge flow | Optimized | Random |
+| Polygon count | Efficient | Often excessive |
+| Non-manifold | Minimal | Common |
+| UV mapping | Clean | Problematic |
+| Physics-ready | Yes | Usually not |
+
+---
+
+## PBR Material Output
+
+
+Rodin generates full PBR material sets:
+
+- **Base Color / Albedo**
+- **Normal Map**
+- **Metallic**
+- **Roughness**
+- **Ambient Occlusion**
+
+All maps follow **glTF metallic-roughness workflow**.
+
+---
+
+## Output Gallery
+
+
+
+---
+
+## Production Workflow Integration
+
+
+Rodin fits into production pipelines:
+
+1. **Concept** - Text/image prompt
+2. **Generation** - Rodin produces game-ready mesh
+3. **Review** - Minimal cleanup required
+4. **Integration** - Direct engine import
+5. **Ship** - Production use without rework
+
+---
+
+## MSF Relevance
+
+Hyper3D Rodin demonstrates that **production-quality AI generation is achievable** with proper focus on topology and materials.
+
+**Key validations:**
+- Clean topology can be AI-generated
+- PBR workflow integration is possible
+- Quality validation profiles are technically feasible
+- Standards for mesh quality are implementable
+
+**Standards implication:** MSF quality validation profiles should include:
+- Topology quality metrics
+- Non-manifold detection
+- UV quality assessment
+- PBR material completeness
+
+---
+
+## Navigation
+
+- [Previous: Blockade Labs](/implementations/blockade-labs/)
+- [Back to Implementations Overview](/implementations/)
+- [Next: Standards Inventory](/standards/)

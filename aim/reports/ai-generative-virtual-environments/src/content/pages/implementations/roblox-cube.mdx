@@ -1,0 +1,170 @@
+---
+title: "Roblox Cube 3D Foundation Model"
+description: "Open-sourced 1.8B parameter model with largest training dataset - setting precedent for model interoperability"
+section: "implementations"
+order: 4.5
+image: "/images/implementations/roblox-cube-hero.webp"
+---
+
+import SRLBadge from '../../../components/SRLBadge.astro';
+import CapabilityTable from '../../../components/CapabilityTable.astro';
+import StandardsCompliance from '../../../components/StandardsCompliance.astro';
+
+
+
+## Basic Information
+
+| Attribute | Value |
+|-----------|-------|
+| **Organization** | Roblox Corporation |
+| **Type** | Open Source + Commercial Platform |
+| **Launch Date** | GDC March 2025 (open-sourced) |
+| **Current Version** | Cube 3D 1.8B parameters |
+| **URL** | [github.com/roblox/cube](https://github.com/roblox/cube) |
+| **License** | MIT (model), Proprietary (platform) |
+
+<SRLBadge level={5} label="SRL-5: Early Adoption" />
+
+---
+
+## Capability Profile
+
+| Capability | Support | Notes |
+|------------|---------|-------|
+| Text-to-Mesh | **Full** | Shape-as-token architecture |
+| In-Experience Generation | **Full** | Lua API for runtime generation |
+| Scene Building Commands | **Full** | "Add streetlights along this road" |
+| AI Assistant | **Full** | Production since 2023 |
+| 4D Generation Roadmap | Planned | Context-aware with behaviors |
+
+
+---
+
+## Standards Compliance
+
+| Standard | Compliance | Notes |
+|----------|------------|-------|
+| **glTF 2.0** | None | Roblox-native formats |
+| **Open Source Model** | **Full** | MIT license on Cube model |
+| **Proprietary Platform** | Full | Roblox Studio integration |
+
+**Unique Position:** Open-source model, closed platform ecosystem.
+
+---
+
+## Maturity Assessment
+
+**SRL Score:** SRL-5 (Early Adoption)
+
+**Evidence:**
+- Open-sourced production model (1.8B parameters)
+- Trained on **1.5M 3D assets** - largest announced dataset
+- 535 million characters of AI-suggested code adopted by June 2024
+- Material Generator has 100%+ adoption increase
+
+---
+
+## Interoperability
+
+| Aspect | Details |
+|--------|---------|
+| **Export Formats** | Roblox-native only |
+| **Import Formats** | Text prompts, reference images |
+| **API Availability** | Yes (Lua API for in-experience generation) |
+| **Known Integrations** | Roblox Studio, Roblox runtime |
+
+---
+
+## Strengths
+
+1. **Open-source model** - MIT license enables research and adaptation outside Roblox
+
+2. **Largest training dataset** - 1.5M 3D assets, more than any other announced system
+
+3. **Runtime generation API** - Enables dynamic content generation during gameplay
+
+4. **"4D" roadmap** - Addresses behavioral generation (3D + interaction)
+
+
+---
+
+## Limitations
+
+1. **Platform-locked outputs** - Generated content works only in Roblox ecosystem
+
+2. **Aesthetic optimization** - Output quality optimized for Roblox's stylized aesthetic, not photorealism
+
+3. **Scene-level generation still roadmap** - "Road to 4D AI" announced but not shipped
+
+---
+
+## Technical Architecture
+
+
+### Shape-as-Token Innovation
+
+Cube 3D uses a novel "shape-as-token" architecture:
+
+1. 3D shapes tokenized into discrete vocabulary
+2. Text and shape tokens unified in single transformer
+3. Generation produces shape tokens directly
+4. Tokens decoded to Roblox-native meshes
+
+### Model Specifications
+
+| Specification | Value |
+|---------------|-------|
+| Parameters | 1.8B |
+| Training Data | 1.5M 3D assets |
+| Architecture | Transformer (shape-as-token) |
+| License | MIT |
+
+---
+
+## "Road to 4D AI"
+
+Roblox's announced roadmap includes **4D generation** - 3D with interaction behaviors:
+
+
+| Phase | Capability | Status |
+|-------|------------|--------|
+| 1 | Text-to-3D mesh | **Shipped** |
+| 2 | Scene building commands | **Shipped** |
+| 3 | Runtime generation API | **Shipped** |
+| 4 | Context-aware behaviors | Roadmap |
+| 5 | Full 4D generation | Roadmap |
+
+---
+
+## Adoption Metrics
+
+| Metric | Value | Source |
+|--------|-------|--------|
+| AI-suggested code adopted | 535M characters | June 2024 |
+| Material Generator adoption | +100% | Roblox announcement |
+| Model downloads | Growing | GitHub |
+| Training dataset size | 1.5M assets | GDC 2025 |
+
+---
+
+## MSF Relevance
+
+Roblox Cube 3D sets important precedents:
+
+1. **Open-sourced foundation model** - Demonstrates that platform companies can release AI models openly
+
+2. **Largest-scale UGC deployment** - Shows AI generation working at massive scale
+
+3. **"4D" terminology** - Influences thinking about behavioral standards (3D + interaction)
+
+4. **Runtime generation** - Demonstrates in-experience generation needs
+
+**Engagement opportunity:** Cube's open-source nature makes it a potential reference implementation for MSF standards work.
+
+---
+
+## Navigation
+
+- [Previous: Meta Horizon Worlds](/implementations/meta-horizon/)
+- [Next: Meshy AI](/implementations/meshy-ai/)
+- [Back to Implementations Overview](/implementations/)

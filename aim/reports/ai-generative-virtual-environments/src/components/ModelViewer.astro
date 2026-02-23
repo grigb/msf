@@ -1,0 +1,347 @@
+---
+/**
+ * ModelViewer.astro
+ * 3D model viewer using Google's model-viewer web component
+ * https://modelviewer.dev
+ */
+
+interface Props {
+  src: string;
+  alt: string;
+  poster?: string;
+  autoRotate?: boolean;
+  cameraControls?: boolean;
+  shadowIntensity?: number;
+  exposure?: number;
+  environmentImage?: string;
+  arEnabled?: boolean;
+}
+
+const {
+  src,
+  alt,
+  poster,
+  autoRotate = true,
+  cameraControls = true,
+  shadowIntensity = 1,
+  exposure = 1,
+  environmentImage,
+  arEnabled = true
+} = Astro.props;
+
+const viewerId = `model-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div class="model-viewer-container" id={viewerId}>
+  <!-- Loading placeholder -->
+  <div class="model-viewer-container__loading" data-model-loading>
+    <div class="model-viewer-container__spinner"></div>
+    <span>Loading 3D model...</span>
+  </div>
+
+  <!-- Error state -->
+  <div class="model-viewer-container__error" data-model-error hidden>
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+      <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/>
+      <path d="M24 16v8M24 28h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <span>Failed to load 3D model</span>
+    <button type="button" data-model-retry>Try again</button>
+  </div>
+
+  <!-- Model Viewer -->
+  <model-viewer
+    class="model-viewer"
+    src={src}
+    alt={alt}
+    poster={poster}
+    auto-rotate={autoRotate ? '' : undefined}
+    camera-controls={cameraControls ? '' : undefined}
+    shadow-intensity={shadowIntensity}
+    exposure={exposure}
+    environment-image={environmentImage}
+    ar={arEnabled ? '' : undefined}
+    ar-modes="webxr scene-viewer quick-look"
+    loading="lazy"
+    reveal="auto"
+    data-model-viewer
+  >
+    <!-- AR button -->
+    {arEnabled && (
+      <button slot="ar-button" class="model-viewer__ar-btn">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <rect x="2" y="6" width="16" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+          <path d="M6 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" stroke-width="2"/>
+          <circle cx="10" cy="11" r="2" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        View in AR
+      </button>
+    )}
+
+    <!-- Progress bar -->
+    <div class="model-viewer__progress" slot="progress-bar">
+      <div class="model-viewer__progress-bar" data-progress-bar></div>
+    </div>
+  </model-viewer>
+
+  <!-- Controls -->
+  <div class="model-viewer-container__controls">
+    <button
+      type="button"
+      class="model-viewer-container__control"
+      data-model-reset
+      title="Reset camera"
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M2 8a6 6 0 1011.47-2.47" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M8 2v4l3-2-3-2z" fill="currentColor"/>
+      </svg>
+    </button>
+
+    <button
+      type="button"
+      class="model-viewer-container__control"
+      data-model-fullscreen
+      title="Fullscreen"
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Caption -->
+  <div class="model-viewer-container__caption">
+    <span class="model-viewer-container__title">{alt}</span>
+    <span class="model-viewer-container__hint">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M6 1v3M6 8v3M1 6h3M8 6h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Drag to rotate, scroll to zoom
+    </span>
+  </div>
+</div>
+
+<!-- Load model-viewer script -->
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+
+<style>
+  .model-viewer-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin: var(--space-4) 0;
+  }
+
+  .model-viewer-container__loading,
+  .model-viewer-container__error {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    background-color: var(--color-surface-alt);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    z-index: 5;
+  }
+
+  .model-viewer-container__loading[hidden],
+  .model-viewer-container__error[hidden] {
+    display: none;
+  }
+
+  .model-viewer-container__spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .model-viewer-container__error button {
+    padding: var(--space-2) var(--space-4);
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+  }
+
+  .model-viewer {
+    width: 100%;
+    height: 100%;
+    --poster-color: transparent;
+  }
+
+  .model-viewer__ar-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+  }
+
+  .model-viewer__ar-btn:hover {
+    background-color: var(--color-primary-hover);
+  }
+
+  .model-viewer__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: var(--color-border);
+  }
+
+  .model-viewer__progress-bar {
+    height: 100%;
+    background-color: var(--color-primary);
+    width: 0;
+    transition: width var(--transition-fast);
+  }
+
+  .model-viewer-container__controls {
+    position: absolute;
+    bottom: var(--space-12);
+    right: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .model-viewer-container__control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .model-viewer-container__control:hover {
+    background-color: var(--color-surface-alt);
+    color: var(--color-text);
+  }
+
+  .model-viewer-container__caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .model-viewer-container__title {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .model-viewer-container__hint {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .model-viewer-container {
+      aspect-ratio: 4 / 3;
+    }
+
+    .model-viewer-container__caption {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-1);
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.model-viewer-container').forEach(container => {
+    const viewer = container.querySelector('[data-model-viewer]') as any;
+    const loading = container.querySelector('[data-model-loading]') as HTMLElement;
+    const error = container.querySelector('[data-model-error]') as HTMLElement;
+    const progressBar = container.querySelector('[data-progress-bar]') as HTMLElement;
+    const resetBtn = container.querySelector('[data-model-reset]');
+    const fullscreenBtn = container.querySelector('[data-model-fullscreen]');
+    const retryBtn = container.querySelector('[data-model-retry]');
+
+    if (!viewer) return;
+
+    // Progress updates
+    viewer.addEventListener('progress', (e: CustomEvent) => {
+      const progress = e.detail.totalProgress;
+      if (progressBar) {
+        progressBar.style.width = `${progress * 100}%`;
+      }
+    });
+
+    // Model loaded
+    viewer.addEventListener('load', () => {
+      if (loading) loading.hidden = true;
+      if (error) error.hidden = true;
+    });
+
+    // Error handling
+    viewer.addEventListener('error', () => {
+      if (loading) loading.hidden = true;
+      if (error) error.hidden = false;
+    });
+
+    // Reset camera
+    resetBtn?.addEventListener('click', () => {
+      viewer.resetTurntableRotation();
+      viewer.jumpCameraToGoal();
+    });
+
+    // Fullscreen
+    fullscreenBtn?.addEventListener('click', () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        container.requestFullscreen();
+      }
+    });
+
+    // Retry loading
+    retryBtn?.addEventListener('click', () => {
+      if (error) error.hidden = true;
+      if (loading) loading.hidden = false;
+      const src = viewer.src;
+      viewer.src = '';
+      viewer.src = src;
+    });
+  });
+</script>

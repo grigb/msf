@@ -1,0 +1,392 @@
+---
+/**
+ * PriorityMatrix.astro
+ * Gap priority matrix (3x3 grid) for visualizing urgency vs impact
+ */
+
+interface MatrixItem {
+  id: string;
+  label: string;
+  urgency: 'high' | 'medium' | 'low';
+  impact: 'high' | 'medium' | 'low';
+  href?: string;
+}
+
+interface Props {
+  items: MatrixItem[];
+  title?: string;
+  xAxisLabel?: string;
+  yAxisLabel?: string;
+}
+
+const {
+  items = [],
+  title = 'Gap Priority Matrix',
+  xAxisLabel = 'Urgency',
+  yAxisLabel = 'Impact'
+} = Astro.props;
+
+// Group items by cell
+type CellKey = `${string}-${string}`;
+
+const cellItems: Record<CellKey, MatrixItem[]> = {};
+
+const levels = ['high', 'medium', 'low'] as const;
+
+levels.forEach(impact => {
+  levels.forEach(urgency => {
+    const key = `${urgency}-${impact}` as CellKey;
+    cellItems[key] = (items || []).filter(
+      item => item.urgency === urgency && item.impact === impact
+    );
+  });
+});
+
+// Priority colors based on position
+const priorityColors: Record<CellKey, { bg: string; border: string; label: string }> = {
+  'high-high': { bg: '#FEE2E2', border: '#DC2626', label: 'Critical' },
+  'high-medium': { bg: '#FFEDD5', border: '#EA580C', label: 'High' },
+  'medium-high': { bg: '#FFEDD5', border: '#EA580C', label: 'High' },
+  'high-low': { bg: '#FEF3C7', border: '#F59E0B', label: 'Medium' },
+  'medium-medium': { bg: '#FEF3C7', border: '#F59E0B', label: 'Medium' },
+  'low-high': { bg: '#FEF3C7', border: '#F59E0B', label: 'Medium' },
+  'medium-low': { bg: '#D1FAE5', border: '#10B981', label: 'Low' },
+  'low-medium': { bg: '#D1FAE5', border: '#10B981', label: 'Low' },
+  'low-low': { bg: '#ECFDF5', border: '#059669', label: 'Minimal' },
+};
+
+// Get unique legend items
+const legendItems = Object.values(priorityColors).reduce((acc, config) => {
+  if (!acc.some(item => item.label === config.label)) {
+    acc.push(config);
+  }
+  return acc;
+}, [] as { bg: string; border: string; label: string }[]);
+---
+
+<div class="priority-matrix">
+  {title && <h3 class="priority-matrix__title">{title}</h3>}
+
+  <div class="priority-matrix__container">
+    <!-- Y-axis label -->
+    <div class="priority-matrix__y-label">
+      <span>{yAxisLabel}</span>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M6 10V2M6 2L2 6M6 2l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Grid -->
+    <div class="priority-matrix__grid">
+      <!-- Row labels (Impact) -->
+      <div class="priority-matrix__row-labels">
+        <span class="priority-matrix__level">High</span>
+        <span class="priority-matrix__level">Medium</span>
+        <span class="priority-matrix__level">Low</span>
+      </div>
+
+      <!-- Matrix cells -->
+      <div class="priority-matrix__cells">
+        {levels.map(impact => (
+          <div class="priority-matrix__row">
+            {levels.map(urgency => {
+              const key = `${urgency}-${impact}` as CellKey;
+              const cellConfig = priorityColors[key];
+              const cellItemsList = cellItems[key];
+
+              return (
+                <div
+                  class="priority-matrix__cell"
+                  style={`--cell-bg: ${cellConfig.bg}; --cell-border: ${cellConfig.border}`}
+                  data-priority={cellConfig.label.toLowerCase()}
+                >
+                  <span class="priority-matrix__cell-label">{cellConfig.label}</span>
+
+                  {cellItemsList.length > 0 && (
+                    <div class="priority-matrix__items">
+                      {cellItemsList.map(item => (
+                        item.href ? (
+                          <a href={item.href} class="priority-matrix__item" title={item.label}>
+                            {item.id}
+                          </a>
+                        ) : (
+                          <span class="priority-matrix__item" title={item.label}>
+                            {item.id}
+                          </span>
+                        )
+                      ))}
+                    </div>
+                  )}
+
+                  {cellItemsList.length === 0 && (
+                    <span class="priority-matrix__empty">-</span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      <!-- Column labels (Urgency) -->
+      <div class="priority-matrix__col-labels">
+        <span class="priority-matrix__level">High</span>
+        <span class="priority-matrix__level">Medium</span>
+        <span class="priority-matrix__level">Low</span>
+      </div>
+    </div>
+
+    <!-- X-axis label -->
+    <div class="priority-matrix__x-label">
+      <span>{xAxisLabel}</span>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M2 6h8M10 6l-4 4M10 6L6 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="priority-matrix__legend">
+    <span class="priority-matrix__legend-title">Priority Levels:</span>
+    {legendItems.map(config => (
+      <div class="priority-matrix__legend-item">
+        <span
+          class="priority-matrix__legend-dot"
+          style={`background-color: ${config.border}`}
+        ></span>
+        <span class="priority-matrix__legend-label">{config.label}</span>
+      </div>
+    ))}
+  </div>
+
+  <!-- Summary -->
+  <div class="priority-matrix__summary">
+    <p>
+      <strong>{items.filter(i => i.urgency === 'high' && i.impact === 'high').length}</strong> critical gaps requiring immediate attention,
+      <strong>{items.filter(i => (i.urgency === 'high' || i.impact === 'high') && !(i.urgency === 'high' && i.impact === 'high')).length}</strong> high priority items.
+    </p>
+  </div>
+</div>
+
+<style>
+  .priority-matrix {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+  }
+
+  .priority-matrix__title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 var(--space-6);
+    text-align: center;
+  }
+
+  .priority-matrix__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .priority-matrix__y-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    position: absolute;
+    left: var(--space-4);
+    top: 50%;
+  }
+
+  .priority-matrix__grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    position: relative;
+    padding-left: var(--space-16);
+  }
+
+  .priority-matrix__row-labels {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-right: var(--space-3);
+  }
+
+  .priority-matrix__level {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+
+  .priority-matrix__cells {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .priority-matrix__row {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .priority-matrix__cell {
+    width: 120px;
+    height: 100px;
+    background-color: var(--cell-bg);
+    border: 2px solid var(--cell-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2);
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .priority-matrix__cell:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-md);
+    z-index: 1;
+  }
+
+  .priority-matrix__cell-label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--cell-border);
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+  }
+
+  .priority-matrix__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .priority-matrix__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-1) var(--space-2);
+    background-color: white;
+    border: 1px solid var(--cell-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-family: var(--font-family-mono);
+    color: var(--cell-border);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  a.priority-matrix__item:hover {
+    background-color: var(--cell-border);
+    color: white;
+  }
+
+  .priority-matrix__empty {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    text-align: center;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .priority-matrix__col-labels {
+    display: flex;
+    justify-content: space-around;
+    padding-top: var(--space-2);
+    width: calc(120px * 3 + var(--space-2) * 2);
+  }
+
+  .priority-matrix__x-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin-top: var(--space-2);
+  }
+
+  .priority-matrix__legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .priority-matrix__legend-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .priority-matrix__legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .priority-matrix__legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: var(--radius-sm);
+  }
+
+  .priority-matrix__legend-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .priority-matrix__summary {
+    margin-top: var(--space-4);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+
+  .priority-matrix__summary strong {
+    color: var(--color-text);
+  }
+
+  @media (max-width: 640px) {
+    .priority-matrix__cell {
+      width: 90px;
+      height: 80px;
+    }
+
+    .priority-matrix__y-label {
+      display: none;
+    }
+
+    .priority-matrix__grid {
+      padding-left: var(--space-10);
+    }
+
+    .priority-matrix__col-labels {
+      width: calc(90px * 3 + var(--space-2) * 2);
+    }
+  }
+</style>

@@ -1,0 +1,307 @@
+---
+/**
+ * CoverageChart.astro
+ * Standards coverage visualization using pure CSS (no JS library)
+ */
+
+interface CoverageItem {
+  id: string;
+  label: string;
+  coverage: number; // 0-100
+  status: 'full' | 'partial' | 'minimal' | 'none';
+  details?: string;
+}
+
+interface CoverageCategory {
+  name: string;
+  items: CoverageItem[];
+}
+
+interface Props {
+  categories: CoverageCategory[];
+  title?: string;
+  showLegend?: boolean;
+}
+
+const {
+  categories,
+  title = 'Standards Coverage',
+  showLegend = true
+} = Astro.props;
+
+// Status colors and labels
+const statusConfig: Record<string, { color: string; label: string; bg: string }> = {
+  full: { color: '#10B981', label: 'Full Coverage', bg: '#D1FAE5' },
+  partial: { color: '#3B82F6', label: 'Partial Coverage', bg: '#DBEAFE' },
+  minimal: { color: '#F59E0B', label: 'Minimal Coverage', bg: '#FEF3C7' },
+  none: { color: '#DC2626', label: 'No Coverage', bg: '#FEE2E2' }
+};
+
+// Calculate summary statistics
+const allItems = categories.flatMap(c => c.items);
+const avgCoverage = allItems.length > 0
+  ? Math.round(allItems.reduce((sum, item) => sum + item.coverage, 0) / allItems.length)
+  : 0;
+const statusCounts: Record<string, number> = allItems.reduce((acc, item) => {
+  acc[item.status] = (acc[item.status] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+---
+
+<div class="coverage-chart">
+  {title && <h3 class="coverage-chart__title">{title}</h3>}
+
+  {showLegend && (
+    <div class="coverage-chart__legend">
+      {Object.entries(statusConfig).map(([key, config]) => (
+        <div class="coverage-chart__legend-item">
+          <span
+            class="coverage-chart__legend-dot"
+            style={`background-color: ${config.color}`}
+          ></span>
+          <span class="coverage-chart__legend-label">{config.label}</span>
+        </div>
+      ))}
+    </div>
+  )}
+
+  <div class="coverage-chart__body">
+    {categories.map(category => (
+      <div class="coverage-chart__category">
+        <h4 class="coverage-chart__category-name">{category.name}</h4>
+
+        <div class="coverage-chart__items">
+          {category.items.map(item => (
+            <div
+              class="coverage-chart__item"
+              data-status={item.status}
+              title={item.details || `${item.label}: ${item.coverage}% coverage`}
+            >
+              <div class="coverage-chart__item-header">
+                <span class="coverage-chart__item-label">{item.label}</span>
+                <span class="coverage-chart__item-value">{item.coverage}%</span>
+              </div>
+
+              <div class="coverage-chart__bar-container">
+                <div
+                  class="coverage-chart__bar"
+                  style={`--coverage: ${item.coverage}%; --status-color: ${statusConfig[item.status].color}`}
+                >
+                  <div class="coverage-chart__bar-fill"></div>
+                </div>
+              </div>
+
+              <span
+                class="coverage-chart__status-badge"
+                style={`--badge-color: ${statusConfig[item.status].color}; --badge-bg: ${statusConfig[item.status].bg}`}
+              >
+                {statusConfig[item.status].label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Summary -->
+  <div class="coverage-chart__summary">
+    <div class="coverage-chart__summary-stat">
+      <span class="coverage-chart__summary-value">{avgCoverage}%</span>
+      <span class="coverage-chart__summary-label">Average Coverage</span>
+    </div>
+    <div class="coverage-chart__summary-breakdown">
+      {Object.entries(statusCounts).map(([status, count]) => (
+        <span
+          class="coverage-chart__summary-item"
+          style={`--item-color: ${statusConfig[status]?.color || '#888'}`}
+        >
+          {count} {statusConfig[status]?.label?.toLowerCase().replace(' coverage', '') || status}
+        </span>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .coverage-chart {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+  }
+
+  .coverage-chart__title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 var(--space-4);
+  }
+
+  .coverage-chart__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .coverage-chart__legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .coverage-chart__legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: var(--radius-full);
+  }
+
+  .coverage-chart__legend-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .coverage-chart__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .coverage-chart__category-name {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-4);
+  }
+
+  .coverage-chart__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .coverage-chart__item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    background-color: var(--color-surface-alt);
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-fast);
+  }
+
+  .coverage-chart__item:hover {
+    background-color: var(--color-border);
+  }
+
+  .coverage-chart__item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    grid-column: 1 / -1;
+  }
+
+  .coverage-chart__item-label {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .coverage-chart__item-value {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--status-color);
+  }
+
+  .coverage-chart__bar-container {
+    grid-column: 1;
+  }
+
+  .coverage-chart__bar {
+    height: 8px;
+    background-color: var(--color-border);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+
+  .coverage-chart__bar-fill {
+    height: 100%;
+    width: var(--coverage);
+    background-color: var(--status-color);
+    border-radius: var(--radius-full);
+    transition: width var(--transition-slow);
+  }
+
+  .coverage-chart__status-badge {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    padding: var(--space-1) var(--space-2);
+    background-color: var(--badge-bg);
+    color: var(--badge-color);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .coverage-chart__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .coverage-chart__summary-stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .coverage-chart__summary-value {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1;
+  }
+
+  .coverage-chart__summary-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-1);
+  }
+
+  .coverage-chart__summary-breakdown {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .coverage-chart__summary-item {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    padding-left: var(--space-3);
+    border-left: 3px solid var(--item-color);
+  }
+
+  @media (max-width: 640px) {
+    .coverage-chart__item {
+      grid-template-columns: 1fr;
+    }
+
+    .coverage-chart__status-badge {
+      justify-self: start;
+    }
+
+    .coverage-chart__summary {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

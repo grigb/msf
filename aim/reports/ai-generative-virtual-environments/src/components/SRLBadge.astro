@@ -1,0 +1,127 @@
+---
+/**
+ * SRLBadge.astro
+ * Visual SRL (Standards Readiness Level) indicator badge
+ *
+ * SRL Levels:
+ * 1-2: Concept/Research (Red)
+ * 3-4: Prototype/Pilot (Amber)
+ * 5-6: Early/Growth (Green)
+ * 7-8: Mainstream/Mature (Blue)
+ * 9: Universal (Purple)
+ */
+
+interface Props {
+  level: number;
+  size?: 'sm' | 'md' | 'lg';
+  showLabel?: boolean;
+}
+
+const { level, size = 'md', showLabel = true } = Astro.props;
+
+// Clamp level between 1 and 9
+const srlLevel = Math.max(1, Math.min(9, Math.round(level)));
+
+// Get color class based on level
+function getColorClass(lvl: number): string {
+  if (lvl <= 2) return 'srl-badge--red';
+  if (lvl <= 4) return 'srl-badge--amber';
+  if (lvl <= 6) return 'srl-badge--green';
+  if (lvl <= 8) return 'srl-badge--blue';
+  return 'srl-badge--purple';
+}
+
+// Get label based on level
+function getLabel(lvl: number): string {
+  const labels: Record<number, string> = {
+    1: 'Concept',
+    2: 'Research',
+    3: 'Prototype',
+    4: 'Pilot',
+    5: 'Early',
+    6: 'Growth',
+    7: 'Mainstream',
+    8: 'Mature',
+    9: 'Universal'
+  };
+  return labels[lvl] || 'Unknown';
+}
+
+const colorClass = getColorClass(srlLevel);
+const label = getLabel(srlLevel);
+---
+
+<span
+  class:list={['srl-badge', `srl-badge--${size}`, colorClass]}
+  title={`SRL-${srlLevel}: ${label}`}
+  role="status"
+>
+  <span class="srl-badge__level">SRL-{srlLevel}</span>
+  {showLabel && <span class="srl-badge__label">{label}</span>}
+</span>
+
+<style>
+  .srl-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+
+  /* Size variants */
+  .srl-badge--sm {
+    font-size: var(--font-size-xs);
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .srl-badge--md {
+    font-size: var(--font-size-sm);
+    padding: var(--space-1) var(--space-3);
+  }
+
+  .srl-badge--lg {
+    font-size: var(--font-size-base);
+    padding: var(--space-2) var(--space-4);
+  }
+
+  /* Color variants - Light professional theme */
+  .srl-badge--red {
+    background-color: var(--srl-1-2-bg);
+    color: var(--srl-1-2);
+  }
+
+  .srl-badge--amber {
+    background-color: var(--srl-3-4-bg);
+    color: var(--srl-3-4);
+  }
+
+  .srl-badge--green {
+    background-color: var(--srl-5-6-bg);
+    color: var(--srl-5-6);
+  }
+
+  .srl-badge--blue {
+    background-color: var(--srl-7-8-bg);
+    color: var(--srl-7-8);
+  }
+
+  .srl-badge--purple {
+    background-color: var(--srl-9-bg);
+    color: var(--srl-9);
+  }
+
+  .srl-badge__level {
+    font-family: var(--font-family-mono);
+  }
+
+  .srl-badge__label {
+    opacity: 0.8;
+  }
+
+  /* Small size hides label by default */
+  .srl-badge--sm .srl-badge__label {
+    display: none;
+  }
+</style>

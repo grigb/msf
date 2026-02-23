@@ -1,0 +1,65 @@
+---
+/**
+ * BaseLayout.astro
+ * Base HTML layout for all pages - provides consistent structure and styling
+ * Configured for offline-first static site generation
+ */
+import TopNav from '../components/TopNav.astro';
+import Footer from '../components/Footer.astro';
+
+// Import all CSS files
+import '../styles/global.css';
+import '../styles/layout.css';
+import '../styles/components.css';
+import '../styles/utilities.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  section?: string;
+}
+
+const {
+  title,
+  description = 'MSF AI-Generated Virtual Environments Reference Site',
+  section = ''
+} = Astro.props;
+
+const siteTitle = 'AI-Generated Virtual Environments';
+const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
+
+// Get current path for navigation highlighting
+const currentPath = Astro.url.pathname;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={description}>
+  <meta name="generator" content={Astro.generator}>
+
+  <!-- Google Fonts - Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <title>{fullTitle}</title>
+</head>
+<body>
+  <!-- Skip to main content for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header/Navigation -->
+  <TopNav currentPath={currentPath} />
+
+  <!-- Main Content -->
+  <main id="main-content" class="main">
+    <slot />
+  </main>
+
+  <!-- Footer -->
+  <Footer version="1.0.0" lastUpdated="2026-01-26" />
+</body>
+</html>

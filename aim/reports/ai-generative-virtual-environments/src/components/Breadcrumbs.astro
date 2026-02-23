@@ -1,0 +1,137 @@
+---
+/**
+ * Breadcrumbs.astro
+ * Current location breadcrumb trail with structured data
+ */
+
+interface BreadcrumbItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+
+// Generate JSON-LD structured data for SEO
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": items.map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": item.label,
+    "item": item.href
+  }))
+};
+---
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol class="breadcrumbs__list" itemscope itemtype="https://schema.org/BreadcrumbList">
+    {items.map((item, index) => (
+      <li
+        class="breadcrumbs__item"
+        itemprop="itemListElement"
+        itemscope
+        itemtype="https://schema.org/ListItem"
+      >
+        {index < items.length - 1 ? (
+          <>
+            <a
+              href={item.href}
+              class="breadcrumbs__link"
+              itemprop="item"
+            >
+              <span itemprop="name">{item.label}</span>
+            </a>
+            <meta itemprop="position" content={String(index + 1)} />
+            <svg
+              class="breadcrumbs__separator"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </>
+        ) : (
+          <>
+            <span
+              class="breadcrumbs__current"
+              itemprop="name"
+              aria-current="page"
+            >
+              {item.label}
+            </span>
+            <meta itemprop="position" content={String(index + 1)} />
+          </>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+<style>
+  .breadcrumbs {
+    padding: var(--space-4) 0;
+  }
+
+  .breadcrumbs__list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    font-size: var(--font-size-sm);
+  }
+
+  .breadcrumbs__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .breadcrumbs__link {
+    color: var(--color-text-muted);
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumbs__link:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .breadcrumbs__separator {
+    color: var(--color-text-muted);
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+
+  .breadcrumbs__current {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  @media (max-width: 640px) {
+    .breadcrumbs__list {
+      font-size: var(--font-size-xs);
+    }
+
+    /* Hide middle items on very small screens */
+    .breadcrumbs__item:not(:first-child):not(:last-child) {
+      display: none;
+    }
+
+    .breadcrumbs__item:first-child:not(:last-child)::after {
+      content: '...';
+      color: var(--color-text-muted);
+      margin-left: var(--space-2);
+    }
+  }
+</style>

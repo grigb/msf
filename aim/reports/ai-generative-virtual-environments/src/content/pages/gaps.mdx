@@ -1,0 +1,206 @@
+---
+title: "Gap Analysis"
+description: "Interoperability, standards, and research gaps in AI-generated virtual environments"
+section: "gaps"
+order: 6
+---
+
+import PriorityMatrix from '../../components/PriorityMatrix.astro';
+import GapCard from '../../components/GapCard.astro';
+
+
+
+## Interoperability Gaps
+
+These gaps affect the ability to move content between systems.
+
+| Gap ID | Description | Affected Parties | Severity |
+|--------|-------------|------------------|----------|
+| **GAP-01** | Video-based world models produce no exportable 3D | Game developers wanting Genie/Oasis content | Critical |
+| **GAP-02** | Gaussian splat format fragmentation across tools | All neural-native tools, game engines | High |
+| **GAP-03** | Generated meshes have topology errors breaking physics | All geometry generators, game engines | High |
+| **GAP-04** | Platform-locked content (Roblox, Horizon, Fortnite) | Creators wanting cross-platform portability | High |
+| **GAP-05** | No navmesh generation in most tools | Game developers requiring NPC navigation | Medium |
+| **GAP-06** | Physics material properties not transferred | Simulation users, robotics applications | Medium |
+
+<div className="gap-cards">
+
+<GapCard
+  id="GAP-01"
+  title="Video-Based Outputs Non-Exportable"
+  severity="critical"
+  description="Video-based world models (Genie 3, Oasis, Odyssey) generate interactive video streams but cannot export 3D geometry. Game developers cannot use this content in engines."
+  affectedAreas={["Genie 3", "Decart Oasis", "Odyssey"]}
+  recommendations={["Monitor video-to-3D reconstruction research", "May remain fundamental paradigm limitation"]}
+/>
+
+<GapCard
+  id="GAP-02"
+  title="Gaussian Splat Format Fragmentation"
+  severity="high"
+  description="Each neural-native tool uses different Gaussian splat formats. No standard interchange format exists, and KHR_gaussian_splatting has no ratification timeline."
+  affectedAreas={["World Labs Marble", "Luma AI", "All neural tools"]}
+  recommendations={["Support KHR_gaussian_splatting ratification", "Advocate for timeline"]}
+/>
+
+<GapCard
+  id="GAP-03"
+  title="Topology Errors Breaking Physics"
+  severity="high"
+  description="AI-generated meshes commonly have non-manifold geometry, T-junctions, and other errors that break physics engines and collision detection."
+  affectedAreas={["All geometry generators", "Game engines", "Physics simulations"]}
+  recommendations={["Define quality validation profiles", "Develop mesh repair standards"]}
+/>
+
+<GapCard
+  id="GAP-04"
+  title="Platform Lock-In"
+  severity="high"
+  description="Content created in Roblox, Meta Horizon, and Fortnite cannot be exported to other platforms. Creators are locked into single ecosystems."
+  affectedAreas={["Roblox creators", "Horizon creators", "Cross-platform developers"]}
+  recommendations={["Interoperability standards pressure", "MSF advocacy"]}
+/>
+
+</div>
+
+---
+
+## Standards Gaps
+
+These are gaps in formal standardization.
+
+| Gap ID | Description | Potential SDO | Complexity | Priority |
+|--------|-------------|---------------|------------|----------|
+| **SGAP-01** | No glTF extension for AI generation metadata | Khronos (MSF proposal) | Medium | **HIGH** |
+| **SGAP-02** | C2PA has no 3D format support | C2PA Coalition | High | **HIGH** |
+| **SGAP-03** | No OpenUSD AI generation schemas | AOUSD | Medium | MEDIUM |
+| **SGAP-04** | KHR_interactivity lacks semantic vocabulary | Khronos | High | MEDIUM |
+| **SGAP-05** | No determinism specification for multiplayer | MSF/Khronos | Medium | MEDIUM |
+| **SGAP-06** | No portable world package format | MSF/Khronos/AOUSD | High | **HIGH** |
+| **SGAP-07** | No quality validation profile standard | MSF/Khronos | Medium | **HIGH** |
+
+### SGAP-01: AI Generation Metadata Extension
+
+**The highest priority standards gap.**
+
+No standard exists for capturing:
+- Generation prompt
+- Seed/random state
+- Model version
+- Quality metrics
+- Generation parameters
+
+**Proposed Solution:** MSF_ai_generation_metadata glTF extension
+
+### SGAP-02: C2PA 3D Format Support
+
+C2PA (Content Authenticity) covers:
+- Images (JPEG, PNG, etc.)
+- Video (MP4, etc.)
+- Audio
+
+C2PA does **not** cover:
+- glTF / GLB
+- USD / USDZ
+- OBJ / FBX
+- Any 3D format
+
+**Proposed Solution:** MSF advocacy to C2PA Coalition
+
+### SGAP-06: World Package Format
+
+No portable format exists for packaging:
+- Scene geometry
+- Textures and materials
+- Physics data (collision, navmesh)
+- AI generation metadata
+- Behavioral scripts
+
+**Complexity:** High - requires multi-SDO coordination (Khronos, AOUSD)
+
+---
+
+## Research Gaps
+
+These gaps require research before standardization is possible.
+
+| Gap ID | Question | Why It Matters | Suggested Approach |
+|--------|----------|----------------|-------------------|
+| **RGAP-01** | Can video-to-3D reconstruction produce game-ready output? | Would bridge paradigms | Monitor DeepMind, academic research |
+| **RGAP-02** | What is acceptable topology quality threshold for physics? | Defines validation profiles | Benchmark study with game studios |
+| **RGAP-03** | Can AI generation be made deterministic across GPU vendors? | Enables multiplayer | Technical feasibility study |
+| **RGAP-04** | What generation metadata is needed for reproducibility? | Informs schema design | Creator workflow research |
+| **RGAP-05** | How do creators actually use AI generation in production? | Validates use case assumptions | User research study |
+
+
+---
+
+## Gap Priority Matrix
+
+<PriorityMatrix
+  items={[
+    { id: "RGAP-02", label: "Quality threshold research", impact: "low", urgency: "low" },
+    { id: "SGAP-03", label: "OpenUSD AI schemas", impact: "medium", urgency: "low" },
+    { id: "GAP-05", label: "Navmesh generation", impact: "high", urgency: "low" },
+    { id: "RGAP-04", label: "Metadata needs research", impact: "low", urgency: "medium" },
+    { id: "SGAP-05", label: "Determinism spec", impact: "medium", urgency: "medium" },
+    { id: "SGAP-01", label: "AI metadata extension", impact: "high", urgency: "medium" },
+    { id: "SGAP-07", label: "Quality validation profiles", impact: "high", urgency: "medium" },
+    { id: "RGAP-01", label: "Video-to-3D research", impact: "low", urgency: "high" },
+    { id: "SGAP-04", label: "Interactivity vocabulary", impact: "medium", urgency: "high" },
+    { id: "SGAP-02", label: "C2PA 3D support", impact: "medium", urgency: "high" },
+    { id: "GAP-01", label: "Video models non-exportable", impact: "high", urgency: "high" },
+    { id: "SGAP-06", label: "World package format", impact: "high", urgency: "high" },
+    { id: "GAP-03", label: "Topology errors", impact: "high", urgency: "high" }
+  ]}
+  xAxisLabel="Urgency"
+  yAxisLabel="Impact"
+/>
+
+
+### Priority Categories
+
+#### Immediate (2026)
+- **SGAP-01:** AI metadata extension (Medium effort, High impact)
+- **SGAP-07:** Validation profiles (Medium effort, High impact)
+
+#### Near-term (2026-2027)
+- **SGAP-06:** World package format (High effort, High impact)
+- **SGAP-02:** C2PA advocacy (High effort, Medium impact)
+
+#### Ongoing
+- **GAP-01:** Monitor video-to-3D research
+- **GAP-03:** Support KHR_gaussian_splatting
+
+---
+
+## Priority Recommendations
+
+### 1. Immediate Action (2026)
+
+| Gap | Action | Owner | Timeline |
+|-----|--------|-------|----------|
+| SGAP-01 | Draft MSF_ai_generation_metadata extension | MSF AI x Metaverse WG | Q2 2026 |
+| SGAP-07 | Define geometry quality validation profiles | MSF AI x Metaverse WG | Q3 2026 |
+
+### 2. Near-term Action (2026-2027)
+
+| Gap | Action | Owner | Timeline |
+|-----|--------|-------|----------|
+| SGAP-06 | Convene world package format discussion | MSF | Q4 2026 |
+| SGAP-02 | Formal engagement with C2PA Coalition | MSF | Q1 2026 |
+
+### 3. Ongoing Monitoring
+
+| Gap | Action | Owner |
+|-----|--------|-------|
+| GAP-01 | Track video-to-3D reconstruction research | MSF Research |
+| GAP-02 | Support KHR_gaussian_splatting ratification | MSF Liaison |
+| GAP-03 | Develop mesh quality benchmarks | MSF + Game Studios |
+
+---
+
+## Navigation
+
+- [Previous: Standards Inventory](/standards/)
+- [Next: SDO Coordination](/coordination/)

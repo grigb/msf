@@ -1,0 +1,367 @@
+---
+/**
+ * ImageGallery.astro
+ * Lightbox image gallery with thumbnail grid
+ */
+
+interface GalleryImage {
+  src: string;
+  alt: string;
+  caption?: string;
+  thumbnail?: string;
+}
+
+interface Props {
+  images: GalleryImage[];
+  columns?: 2 | 3 | 4;
+  aspectRatio?: string;
+}
+
+const {
+  images,
+  columns = 3,
+  aspectRatio = '4 / 3'
+} = Astro.props;
+
+const galleryId = `gallery-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div class="image-gallery" data-gallery id={galleryId} style={`--columns: ${columns}`}>
+  <div class="image-gallery__grid">
+    {images.map((image, index) => (
+      <button
+        class="image-gallery__item"
+        type="button"
+        data-gallery-item
+        data-index={index}
+        style={`aspect-ratio: ${aspectRatio}`}
+      >
+        <img
+          src={image.thumbnail || image.src}
+          alt={image.alt}
+          loading="lazy"
+          decoding="async"
+          class="image-gallery__thumbnail"
+        />
+        <div class="image-gallery__overlay">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+            <path d="M11 8v6M8 11h6M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </button>
+    ))}
+  </div>
+
+  <!-- Lightbox -->
+  <div class="image-gallery__lightbox" data-lightbox hidden>
+    <div class="image-gallery__lightbox-backdrop" data-lightbox-close></div>
+
+    <div class="image-gallery__lightbox-content">
+      <button
+        class="image-gallery__lightbox-close"
+        type="button"
+        aria-label="Close lightbox"
+        data-lightbox-close
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <button
+        class="image-gallery__lightbox-nav image-gallery__lightbox-nav--prev"
+        type="button"
+        aria-label="Previous image"
+        data-lightbox-prev
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="image-gallery__lightbox-image-container">
+        <img
+          class="image-gallery__lightbox-image"
+          data-lightbox-image
+          src=""
+          alt=""
+        />
+      </div>
+
+      <button
+        class="image-gallery__lightbox-nav image-gallery__lightbox-nav--next"
+        type="button"
+        aria-label="Next image"
+        data-lightbox-next
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="image-gallery__lightbox-footer">
+        <p class="image-gallery__lightbox-caption" data-lightbox-caption></p>
+        <span class="image-gallery__lightbox-counter" data-lightbox-counter></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Store images data -->
+<script define:vars={{ images, galleryId }}>
+  window[`galleryData_${galleryId}`] = images;
+</script>
+
+<style>
+  .image-gallery {
+    margin: var(--space-4) 0;
+  }
+
+  .image-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--columns), 1fr);
+    gap: var(--space-3);
+  }
+
+  .image-gallery__item {
+    position: relative;
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    cursor: zoom-in;
+    transition: all var(--transition-fast);
+  }
+
+  .image-gallery__item:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .image-gallery__thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .image-gallery__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+    opacity: 0;
+    transition: all var(--transition-fast);
+  }
+
+  .image-gallery__item:hover .image-gallery__overlay {
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 1;
+  }
+
+  /* Lightbox styles */
+  .image-gallery__lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image-gallery__lightbox[hidden] {
+    display: none;
+  }
+
+  .image-gallery__lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+
+  .image-gallery__lightbox-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image-gallery__lightbox-close {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    z-index: 10;
+    padding: var(--space-3);
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: var(--radius-full);
+    color: white;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+  }
+
+  .image-gallery__lightbox-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .image-gallery__lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    padding: var(--space-4);
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: var(--radius-full);
+    color: white;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+  }
+
+  .image-gallery__lightbox-nav:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .image-gallery__lightbox-nav--prev {
+    left: var(--space-4);
+  }
+
+  .image-gallery__lightbox-nav--next {
+    right: var(--space-4);
+  }
+
+  .image-gallery__lightbox-image-container {
+    max-width: 90vw;
+    max-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image-gallery__lightbox-image {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+  }
+
+  .image-gallery__lightbox-footer {
+    position: absolute;
+    bottom: var(--space-4);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    color: white;
+    text-align: center;
+  }
+
+  .image-gallery__lightbox-caption {
+    font-size: var(--font-size-sm);
+    max-width: 60ch;
+  }
+
+  .image-gallery__lightbox-counter {
+    font-size: var(--font-size-xs);
+    opacity: 0.7;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .image-gallery__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .image-gallery__lightbox-nav {
+      padding: var(--space-2);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .image-gallery__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-gallery]').forEach(gallery => {
+    const galleryId = gallery.id;
+    const images = (window as any)[`galleryData_${galleryId}`] || [];
+    const lightbox = gallery.querySelector('[data-lightbox]') as HTMLElement;
+    const lightboxImage = gallery.querySelector('[data-lightbox-image]') as HTMLImageElement;
+    const lightboxCaption = gallery.querySelector('[data-lightbox-caption]') as HTMLElement;
+    const lightboxCounter = gallery.querySelector('[data-lightbox-counter]') as HTMLElement;
+
+    let currentIndex = 0;
+
+    function showImage(index: number) {
+      currentIndex = index;
+      const image = images[index];
+      if (!image || !lightboxImage) return;
+
+      lightboxImage.src = image.src;
+      lightboxImage.alt = image.alt;
+
+      if (lightboxCaption) {
+        lightboxCaption.textContent = image.caption || '';
+      }
+
+      if (lightboxCounter) {
+        lightboxCounter.textContent = `${index + 1} / ${images.length}`;
+      }
+    }
+
+    function openLightbox(index: number) {
+      showImage(index);
+      lightbox?.removeAttribute('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox?.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+    }
+
+    function nextImage() {
+      showImage((currentIndex + 1) % images.length);
+    }
+
+    function prevImage() {
+      showImage((currentIndex - 1 + images.length) % images.length);
+    }
+
+    // Event listeners
+    gallery.querySelectorAll('[data-gallery-item]').forEach(item => {
+      item.addEventListener('click', () => {
+        const index = parseInt(item.getAttribute('data-index') || '0', 10);
+        openLightbox(index);
+      });
+    });
+
+    gallery.querySelectorAll('[data-lightbox-close]').forEach(btn => {
+      btn.addEventListener('click', closeLightbox);
+    });
+
+    gallery.querySelector('[data-lightbox-prev]')?.addEventListener('click', prevImage);
+    gallery.querySelector('[data-lightbox-next]')?.addEventListener('click', nextImage);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (lightbox?.hasAttribute('hidden')) return;
+
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+    });
+  });
+</script>

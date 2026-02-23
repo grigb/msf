@@ -1,0 +1,192 @@
+---
+title: "Appendices"
+description: "Complete implementation inventory, research sources, and methodology notes"
+section: "appendices"
+order: 10
+---
+
+import ComparisonTable from '../../components/ComparisonTable.astro';
+
+
+## Appendix A: Complete Implementation Inventory
+
+Full list of all implementations discovered beyond the Top 35 featured in the main report.
+
+| Name | Organization | Type | URL | Notes |
+|------|--------------|------|-----|-------|
+| Infinigen | Princeton | Open Source | github.com/princeton-vl/infinigen | Blender-based procedural photorealistic worlds |
+| ZiYang WorldGen | Academic | Open Source | github.com/ZiYang-xie/WorldGen | Text-to-3D scenes, Gaussian splat output |
+| EmbodiedGen | Horizon Robotics | Open Source | github.com/HorizonRobotics/EmbodiedGen | Six-module generative engine with physics |
+| stable-dreamfusion | ashawkey | Open Source | github.com/ashawkey/stable-dreamfusion | Popular SDS implementation |
+| GaussianSplats3D | mkkellogg | Open Source | github.com/mkkellogg/GaussianSplats3D | Three.js Gaussian splat renderer |
+| Webaverse | Webaverse | Open Source | github.com/webaverse | AI-first metaverse, procedural worlds |
+| Baidu XiRang | Baidu | Commercial | xirang.baidu.com | Chinese industrial metaverse |
+| NetEase Yaotai | NetEase | Commercial | yaotai.163.com | Chinese virtual events platform |
+| Cluster.mu | Cluster | Commercial | cluster.mu | Japan's largest metaverse platform |
+| Zepeto Studio | Naver | Commercial | studio.zepeto.me | K-pop focused avatar/world creation |
+| Ready Player Me | Ready Player Me | Commercial | readyplayer.me | Cross-platform avatar system |
+| VRoid Studio | Pixiv | Free | vroid.com | Anime avatar creation |
+| Avaturn | Avaturn | Commercial | avaturn.me | Realistic avatar from photos |
+| Tafi | Tafi | Commercial | maketafi.com | Character creation engine |
+
+### Categories Not Covered in Main Report
+
+#### Academic/Research
+- Infinigen (Princeton)
+- ZiYang WorldGen
+- stable-dreamfusion
+
+#### Regional Platforms (Asia)
+- Baidu XiRang (China)
+- NetEase Yaotai (China)
+- Cluster.mu (Japan)
+- Zepeto Studio (Korea)
+
+#### Avatar-Focused
+- Ready Player Me
+- VRoid Studio
+- Avaturn
+- Tafi
+
+---
+
+## Appendix B: Research Sources
+
+All sources used in this report.
+
+| ID | Type | Title | Author/Org | Date | Location |
+|----|------|-------|------------|------|----------|
+| [1] | Research Mining | 01-scope-definitions.md | WG Analysis | 2025-12-14 | research-mining/ |
+| [2] | Research Mining | 02-consumer-types.md | WG Analysis | 2025-12-14 | research-mining/ |
+| [3] | Research Mining | 03-natural-divisions.md | WG Analysis | 2025-12-14 | research-mining/ |
+| [4] | Research Mining | 04-domain-relationships.md | WG Analysis | 2025-12-14 | research-mining/ |
+| [5] | Research Mining | 05-surprises.md | WG Analysis | 2025-12-14 | research-mining/ |
+| [6] | Research Mining | 06-terminology.md | WG Analysis | 2025-12-14 | research-mining/ |
+| [7] | Standards Research | CONSOLIDATED-FINDINGS.md | WG Analysis | 2025-12-15 | standards-deep-dive/ |
+| [8] | Standards Research | R1-khr-gaussian-splatting.md | WG Analysis | 2025-12-15 | standards-deep-dive/ |
+| [9] | Deep Research | world_models_deep_research.md | Decision Framework | 2025 | world-models-decision-framework/ |
+| [10] | Survey | AI-Generative-World-Creation-survey.md | MSF Research | 2025-12 | Generative-3D research |
+| [11] | Synthesis | deep-research-synthesis.md | Research Agent | 2025-12-11 | metaverse-creator-interop/ |
+| [12] | Use Case | USE-CASE-AI-GENERATED-3D-ENVS-FINAL.md | WG Output | 2026-01 | output/ |
+| [13] | Specification | glTF 2.0 Specification | Khronos Group | 2017+ | registry.khronos.org/glTF |
+| [14] | Specification | C2PA v2.2 Specification | C2PA Coalition | 2025-05 | c2pa.org |
+| [15] | Specification | OpenUSD Documentation | AOUSD | 2024 | openusd.org |
+| [16] | Blog | Khronos 3DGS Announcement | Khronos/OGC | 2025-08 | khronos.org/blog |
+| [17] | GitHub | KHR_gaussian_splatting PR #2490 | Khronos | 2025 | github.com/KhronosGroup/glTF |
+
+### Source Categories
+
+#### Working Group Analysis
+Sources [1]-[8] - Internal research mining and analysis conducted by the AI x Metaverse Working Group
+
+#### Deep Research
+Sources [9]-[11] - Extended research synthesis and decision frameworks
+
+#### Official Specifications
+Sources [13]-[15] - Published specifications from SDOs
+
+#### Community/GitHub
+Sources [16]-[17] - Public discussions and draft specifications
+
+---
+
+## Appendix C: Methodology Notes
+
+### Research Collection
+
+| Aspect | Detail |
+|--------|--------|
+| Models used | Claude Opus 4.5, Gemini 1.5 Pro (historical research) |
+| Queries executed | 50+ deep research queries across 6 months |
+| Date range | December 2024 - January 2026 |
+| Primary sources | GitHub repositories, SDO specifications, company documentation, academic papers |
+
+### Maturity Assessment
+
+| Aspect | Detail |
+|--------|--------|
+| Assessment date | January 2026 |
+| Assessor | AI x Metaverse Working Group |
+| Validation | Cross-referenced against multiple research agents; verified against primary sources |
+| Implementation counts | Validated against public metrics |
+
+### SRL Score Assignment
+
+SRL scores were assigned using the following process:
+
+1. **Evidence Collection** - Gather data on funding, user counts, deployment status
+2. **Level Mapping** - Map evidence to SRL scale criteria
+3. **Cross-Validation** - Compare against peer implementations
+4. **Consensus Review** - Working Group review and adjustment
+
+### Limitations
+
+| Limitation | Impact | Mitigation |
+|------------|--------|------------|
+| Vendor documentation may be aspirational | Some capabilities may be overstated | Cross-reference with user reports |
+| SRL scores are estimates | Some subjectivity involved | Document evidence for each score |
+| Rapidly evolving field | Findings may become outdated | Plan 6-month refresh cycle |
+| Limited SDO access | May miss unpublished discussions | Engage through MSF liaison channels |
+
+---
+
+## Appendix D: Change Log
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.2 | 2026-01-26 | Fixed markdown formatting for GitHub/Obsidian compliance |
+| 1.1 | 2026-01-26 | Fixed citation format consistency; updated Appendix B with full source paths |
+| 1.0 | 2026-01-26 | Initial release |
+
+---
+
+## Appendix E: Quality Checklist
+
+Before publication, the following items were verified:
+
+- [x] All SRL scores have cited evidence
+- [x] All Top 10 implementations have complete profiles
+- [x] All gaps have severity ratings
+- [x] All recommendations have rationale
+- [x] No [NEEDS CITATION] flags remain
+- [x] Executive summary reflects body content
+- [ ] All URLs verified accessible (pending verification)
+- [x] Terminology table complete
+- [x] SDO coordination map current
+
+---
+
+## Appendix F: Glossary Quick Reference
+
+| Term | Definition |
+|------|------------|
+| **World Model** | AI system that understands dynamics and generates interactive simulations |
+| **3DGS** | 3D Gaussian Splatting - neural representation using Gaussian particles |
+| **SRL** | Standards Readiness Level - maturity assessment scale |
+| **glTF** | GL Transmission Format - Khronos 3D interchange standard |
+| **USD** | Universal Scene Description - AOUSD scene interchange standard |
+| **C2PA** | Coalition for Content Provenance and Authenticity |
+| **MSF** | Metaverse Standards Forum |
+| **KHR** | Khronos ratified extension prefix |
+| **Navmesh** | Navigation mesh - geometry for NPC pathfinding |
+| **PBR** | Physically Based Rendering - material workflow standard |
+
+---
+
+## Appendix G: Contact and Feedback
+
+**Report Maintainer:** AI x Metaverse Working Group
+
+**Feedback Channels:**
+- MSF internal channels
+- Working Group meetings
+- GitHub issues (if published)
+
+**Next Scheduled Review:** Q3 2026
+
+---
+
+## Navigation
+
+- [Previous: Recommendations](/recommendations/)
+- [Back to Home](/)
